@@ -1,0 +1,47 @@
+.search {
+    position: relative;
+    background-color: darkgray;
+    width: 20%;
+    margin-left: auto;
+    border-radius: 5px;
+}
+
+.search:hover {
+    background-color: lightgray;
+    transition: 0.2s;
+}
+
+.searchIconWrapper {
+    padding: 5px;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchfield {
+    padding-left: 30px;
+    border: 0px;
+}
+
+.tableheader {
+    background-color: darkgray;
+    border-bottom: 2px black;
+    font-weight: bold;
+}
+
+.tablerow {
+    cursor: pointer;
+}
+
+.tablerow:nth-of-type(odd) {
+    background-color: rgb(233, 232, 231);
+}
+
+.tablerow:last-child td :last-child th {
+    border: 0;
+}
+
+.tablerow:hover {
+    background-color: lightgray;
+}
