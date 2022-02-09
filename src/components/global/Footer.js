@@ -4,13 +4,12 @@ import { useState } from 'react';
 
 import './Footer.css';
 
-export default function Footer({setMenuFunction}) {
-    const [isAdmin, setIsAdmin] = useState(false);
+export default function Footer({setMenuFunction, isAdmin, setIsAdminFunction}) {
 
     function switchMenu() {
-        setIsAdmin(!isAdmin);
-        if (isAdmin) {
-            setMenuFunction([{text: "Menü1", link: "/"}, {text: "Menü2", link: "/"}, {text: "Menü3", link: "/"}, {text: "Menü4", link: "/"}]);
+        setIsAdminFunction(!isAdmin);
+        if (!isAdmin/*Somehow admin is set after the function*/) {
+            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/"}, {text: "Menü3", link: "/"}, {text: "Menü4", link: "/"}]);
         } else {
             setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Menü2", link: "/"}, {text: "Menü3", link: "/"}, {text: "Menü4", link: "/"}]);
         }

@@ -8,19 +8,20 @@ import Footer from './components/global/Footer';
 
 export default function AppRouter() {
     const [menu, setMenu] = useState([{text: "Buslinien", link: "/"}, {text: "Menü2", link: "/"}, {text: "Menü3", link: "/"}, {text: "Menü4", link: "/"}]);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     return <>
         <Router>
             <Switch>
                 <Route path="/busline/:name">
                     <Header menuData={menu}/>
-                    <BuslineDetail />
-                    <Footer setMenuFunction={setMenu}/>
+                    <BuslineDetail isAdmin={isAdmin}/>
+                    <Footer setMenuFunction={setMenu} isAdmin={isAdmin} setIsAdminFunction={setIsAdmin}/>
                 </Route>
                 <Route path="/">
                     <Header menuData={menu}/>
-                    <Home />
-                    <Footer setMenuFunction={setMenu}/>
+                    <Home isAdmin={isAdmin}/>
+                    <Footer setMenuFunction={setMenu} isAdmin={isAdmin} setIsAdminFunction={setIsAdmin}/>
                 </Route>
             </Switch>
         </Router>

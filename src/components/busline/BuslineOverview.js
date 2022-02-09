@@ -1,13 +1,18 @@
-import { Autocomplete, Box, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, IconButton, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import InputMask from 'react-input-mask';
 import React from 'react';
 import { useState } from 'react';
 import './BuslineOverview.css';
 import { useHistory } from 'react-router-dom';
+import AddIcon from '@mui/icons-material/Add';
+import BuslineEditor from './BuslineEditor';
 
-export default function BuslineOverview() {
+export default function BuslineOverview({isAdmin}) {
     let history = useHistory();
+    const [editorOpen, setEditorOpen] = useState(false);
+    const [detailOpen, setDetailOpen] = useState(false);
+    const [selectedBusline, setSelectedBusline] = useState(undefined);
 
     var allBuslines = [
         {id: 0, name: "1", destination: "Roxel"},
@@ -23,8 +28,22 @@ export default function BuslineOverview() {
     }
 
     function onSelectBusline(busline) {
-        console.log(busline);
-        history.push(`/busline/${busline}`);
+        setSelectedBusline(busline);
+        if (isAdmin) {
+            setEditorOpen(true);
+        } else {
+            setDetailOpen(true);
+        } 
+    }
+
+    function addBusline() {
+        setEditorOpen(true);
+    }
+
+    function closeDialogs() {
+        setEditorOpen(false);
+        setDetailOpen(false);
+        setSelectedBusline(undefined);
     }
 
     return <>
@@ -33,6 +52,14 @@ export default function BuslineOverview() {
         </Box>
         <Box sx={{flexGrow: 1}}>
             <Toolbar sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
+                {   isAdmin &&
+                    <div>
+                        <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
+                            Hinzufügen
+                        </Button>
+                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setSelectedBusline} /> 
+                    </div>
+                }
                 <div className='search'>
                     <div className='searchIconWrapper'>
                         <SearchIcon />
