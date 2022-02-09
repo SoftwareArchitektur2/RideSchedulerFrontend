@@ -1,4 +1,4 @@
-import { Autocomplete, Box, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar } from '@mui/material';
+import { Autocomplete, Box, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import InputMask from 'react-input-mask';
 import React from 'react';
@@ -28,8 +28,11 @@ export default function BuslineOverview() {
     }
 
     return <>
+        <Box>
+            <Typography variant='h4' sx={{'marginLeft': '25%'}}>Übersicht über die Buslinien</Typography>
+        </Box>
         <Box sx={{flexGrow: 1}}>
-            <Toolbar>
+            <Toolbar sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
                 <div className='search'>
                     <div className='searchIconWrapper'>
                         <SearchIcon />
@@ -48,22 +51,18 @@ export default function BuslineOverview() {
             </Toolbar>
         </Box>
         <Box>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
                 <Table aria-label="Verfügbare Linien">
                     <TableHead>
                         <TableRow>
-                            <TableCell className='tableheader'>ID</TableCell>
                             <TableCell className='tableheader'>Nummer</TableCell>
-                            <TableCell className='tableheader'>Endhaltestation</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             displayedBuslines.map((line) => (
-                                <TableRow key={line.id} className='tablerow' onClick={(event) => onSelectBusline(line.name)}>
-                                    <TableCell>{line.id}</TableCell>
+                                <TableRow key={line.name} className='tablerow' onClick={(event) => onSelectBusline(line.name)}>
                                     <TableCell>{line.name}</TableCell>
-                                    <TableCell>{line.destination}</TableCell>
                                 </TableRow>
                             ))
                         }
