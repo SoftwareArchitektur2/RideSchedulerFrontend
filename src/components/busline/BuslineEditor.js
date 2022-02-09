@@ -3,8 +3,8 @@ import InputMask from 'react-input-mask';
 import React from "react";
 import { useState } from "react";
 
-export default function BuslineEditor({open, name, handleClose, setName}) {
-    const [displayedName, setDisplayedName] = useState(name);
+export default function BuslineEditor({open, name, handleClose, setName, displayedName, setDisplayedName}) {
+
 
     return <>
         <Dialog open={open} onClose={handleClose}>

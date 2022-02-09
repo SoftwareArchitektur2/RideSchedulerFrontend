@@ -13,6 +13,7 @@ export default function BuslineOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
+    const [displayedName, setDisplayedName] = useState(undefined);
 
     var allBuslines = [
         {id: 0, name: "1", destination: "Roxel"},
@@ -29,6 +30,7 @@ export default function BuslineOverview({isAdmin}) {
 
     function onSelectBusline(busline) {
         setSelectedBusline(busline);
+        setDisplayedName(busline + "");
         if (isAdmin) {
             setEditorOpen(true);
         } else {
@@ -57,7 +59,7 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setSelectedBusline} /> 
+                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setSelectedBusline} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
                     </div>
                 }
                 <div className='search'>
