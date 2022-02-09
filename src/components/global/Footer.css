@@ -1,0 +1,25 @@
+.footer {
+    background-color: lightgray;
+    width: 100vw;
+    min-height: 2vh;
+    margin-top: 5%;
+    position: absolute;
+    bottom: 0px;
+}
+
+.footerLeft {
+    cursor: pointer;
+    min-height: 2vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+}
+
+.footerLeft:hover {
+    font-weight: bold !important;
+}
+
+.footertext {
+    text-align: right;
+    padding-right: 5px;
+}
