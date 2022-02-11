@@ -7,6 +7,7 @@ import './BuslineOverview.css';
 import { useHistory } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import BuslineEditor from './BuslineEditor';
+import BuslineDetail from './BuslineDetail';
 
 export default function BuslineOverview({isAdmin}) {
     let history = useHistory();
@@ -111,5 +112,6 @@ export default function BuslineOverview({isAdmin}) {
                 </Table>
             </TableContainer>
         </Box>
+        <BuslineDetail open={detailOpen} busline={selectedBusline} handleClose={() => closeDialogs()}></BuslineDetail>
     </>;
 }

@@ -1,0 +1,49 @@
+.buslineDetailTitle {
+    padding-bottom: 5px !important;
+}
+
+.detailContent {
+    padding-bottom: 0px !important;
+}
+
+.busstopTable {
+    width: 25vw;
+    margin-top: 10px;
+}
+
+ul.busstops li {
+    position:relative; 
+    margin-bottom: 0;
+    padding-bottom: 2.5em;
+    font-family: 'Roboto';
+}
+
+ul.busstops li:last-child {
+    padding-bottom: 0px;
+}
+
+ul.busstops li:after {
+    /* bullets */
+    content: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Red_square.svg/16px-Red_square.svg.png');
+    position: absolute;
+    left: -20px; /*adjust manually*/
+    top: 2px;
+}
+
+ul.busstops li:before {
+    /* lines */
+    content:"";
+    position: absolute;
+    left: -13px; /* adjust manually */
+    border-left: 3px solid red;
+    height: 100%;
+    width: 1px;
+}
+
+ul.busstops li:first-child:before {
+   top: 6px; /* moves the line down so that it disappears under the bullet. Adjust manually */
+}
+
+ul.busstops li:last-child:before {
+   height: 6px; /* shorten the line so it goes only up to the bullet. Is equal to first-child:before's top */
+}

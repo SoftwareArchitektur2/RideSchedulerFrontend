@@ -13,11 +13,11 @@ export default function AppRouter() {
     return <>
         <Router>
             <Switch>
-                <Route path="/busline/:name">
+                {/* <Route path="/busline/:name">
                     <Header menuData={menu}/>
                     <BuslineDetail isAdmin={isAdmin}/>
                     <Footer setMenuFunction={setMenu} isAdmin={isAdmin} setIsAdminFunction={setIsAdmin}/>
-                </Route>
+                </Route> */}
                 <Route path="/">
                     <Header menuData={menu}/>
                     <Home isAdmin={isAdmin}/>
