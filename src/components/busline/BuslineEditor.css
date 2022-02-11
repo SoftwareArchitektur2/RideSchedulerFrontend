@@ -1,0 +1,16 @@
+.buslineInput {
+    margin-top: 16px !important;
+}
+
+.buslineEditorTitle {
+    padding-bottom: 5px !important;
+}
+
+.editorContent {
+    padding-bottom: 0px !important;
+}
+
+.busstopTable {
+    width: 25vw;
+    margin-top: 10px;
+}

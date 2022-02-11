@@ -14,14 +14,14 @@ export default function BuslineOverview({isAdmin}) {
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
     const [displayedName, setDisplayedName] = useState(undefined);
+    const [allBuslines, setAllBuslines] = useState([
+        {id: 0, name: "1"},
+        {id: 1, name: "11"},
+        {id: 2, name: "15"},
+        {id: 3, name: "16"},
+        {id: 4, name: "22"}
+    ]);
 
-    var allBuslines = [
-        {id: 0, name: "1", destination: "Roxel"},
-        {id: 1, name: "11", destination: "Münster Hbf"},
-        {id: 2, name: "15", destination: "Kinderhaus"},
-        {id: 3, name: "16", destination: "Coerde"},
-        {id: 4, name: "22", destination: "Gievenbeck"}
-    ];
     const [displayedBuslines, setDisplayedBuslines] = useState(allBuslines);
 
     function onBusSearch(value) {
@@ -39,6 +39,8 @@ export default function BuslineOverview({isAdmin}) {
     }
 
     function addBusline() {
+        setSelectedBusline(undefined);
+        setDisplayedName(undefined);
         setEditorOpen(true);
     }
 
@@ -46,6 +48,16 @@ export default function BuslineOverview({isAdmin}) {
         setEditorOpen(false);
         setDetailOpen(false);
         setSelectedBusline(undefined);
+    }
+
+    function setNameForBusline(buslineName) {
+        var editedBusline = allBuslines.filter(busline => selectedBusline == busline.name)[0];
+        if (editedBusline) {
+            editedBusline.name = buslineName;
+        } else {
+            allBuslines.push({id: allBuslines[allBuslines.length - 1].id + 1, name: buslineName});
+        }
+        onBusSearch("");
     }
 
     return <>
@@ -59,7 +71,7 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setSelectedBusline} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
+                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setNameForBusline} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
                     </div>
                 }
                 <div className='search'>
