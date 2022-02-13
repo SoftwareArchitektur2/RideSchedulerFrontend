@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useState } from "react";
 import './BusstopOverview.css';
+import BusstopEditor from "./BusstopEditor";
 
 export default function BusstopOverview({isAdmin}) {
     const [allBusstops, setAllBusstops] = useState([
@@ -18,14 +19,16 @@ export default function BusstopOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusstop, setSelectedBusstop] = useState(undefined);
+    const [search, setSearch] = useState(undefined);
 
     function addBusstop() {
         setSelectedBusstop(undefined);
         setEditorOpen(true);
     }
 
-    function onBusstopSearch(search) {
-        setDisplayedBusstops(allBusstops.filter(stop => stop.name.includes(search)));
+    function onBusstopSearch(searchInput) {
+        setSearch(searchInput);
+        setDisplayedBusstops(allBusstops.filter(stop => stop.name.includes(searchInput)));
     }
 
     function onSelectBusstop(stop) {
@@ -43,9 +46,23 @@ export default function BusstopOverview({isAdmin}) {
         setSelectedBusstop(undefined);
     }
 
+    function setEditedBusstop(stop) {
+        let existingStop = allBusstops.filter(busstop => busstop.name == stop.name)[0];
+        if (existingStop) {
+            let index = allBusstops.indexOf(existingStop);
+            let editedBusstops = {...allBusstops};
+            editedBusstops.splice(index, 1, stop);
+            setAllBusstops(editedBusstops);
+        } else {
+            let newList = {...allBusstops};
+            newList.push(stop);
+            setAllBusstops(newList);
+        }
+    }
+
     return <>
          <Box>
-            <Typography variant='h4' sx={{'marginLeft': '25%'}}>Übersicht über die Buslinien</Typography>
+            <Typography variant='h4' sx={{'marginLeft': '25%'}}>Übersicht über die Haltestellen</Typography>
         </Box>
         <Box sx={{flexGrow: 1}}>
             <Toolbar sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
@@ -54,6 +71,7 @@ export default function BusstopOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusstop()}>
                             Hinzufügen
                         </Button>
+                        <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop} setBusstop={(stop) => setEditedBusstop(stop)} />
                     </div>
                 }
                 <div className='search'>
@@ -64,6 +82,7 @@ export default function BusstopOverview({isAdmin}) {
                             placeholder='Haltestelle'
                             className='searchfield'
                             onInput={(event) => onBusstopSearch(event.target.value)}
+                            value={search}
                     />
                 </div>
             </Toolbar>
