@@ -5,6 +5,7 @@ import Home from './components/Home';
 import { useState } from 'react';
 import Header from './components/global/Header';
 import Footer from './components/global/Footer';
+import BusstopOverview from './components/busstop/BusstopOverview';
 
 export default function AppRouter() {
     const [menu, setMenu] = useState([{text: "Buslinien", link: "/"}, {text: "Menü2", link: "/"}, {text: "Menü3", link: "/"}, {text: "Menü4", link: "/"}]);
@@ -13,11 +14,11 @@ export default function AppRouter() {
     return <>
         <Router>
             <Switch>
-                {/* <Route path="/busline/:name">
+                 <Route path="/busstops">
                     <Header menuData={menu}/>
-                    <BuslineDetail isAdmin={isAdmin}/>
+                    <BusstopOverview isAdmin={isAdmin}/>
                     <Footer setMenuFunction={setMenu} isAdmin={isAdmin} setIsAdminFunction={setIsAdmin}/>
-                </Route> */}
+                </Route> 
                 <Route path="/">
                     <Header menuData={menu}/>
                     <Home isAdmin={isAdmin}/>
