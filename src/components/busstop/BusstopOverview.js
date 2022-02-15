@@ -50,14 +50,15 @@ export default function BusstopOverview({isAdmin}) {
         let existingStop = allBusstops.filter(busstop => busstop.name == stop.name)[0];
         if (existingStop) {
             let index = allBusstops.indexOf(existingStop);
-            let editedBusstops = {...allBusstops};
+            let editedBusstops = [...allBusstops];
             editedBusstops.splice(index, 1, stop);
             setAllBusstops(editedBusstops);
         } else {
-            let newList = {...allBusstops};
+            let newList = [...allBusstops];
             newList.push(stop);
             setAllBusstops(newList);
         }
+        setSelectedBusstop(stop);
     }
 
     return <>

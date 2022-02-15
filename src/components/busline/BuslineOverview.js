@@ -10,7 +10,6 @@ import BuslineEditor from './BuslineEditor';
 import BuslineDetail from './BuslineDetail';
 
 export default function BuslineOverview({isAdmin}) {
-    let history = useHistory();
     const [editorOpen, setEditorOpen] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);

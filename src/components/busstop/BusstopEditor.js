@@ -18,6 +18,7 @@ export default function BusstopEditor({open, handleClose, busstop, setBusstop}) 
         } else {
             setBusstop({name: stopname, hasWifi: wifiCheck.current});
         }
+        console.log(busstop);
     }
 
     function setWifi(wifi) {
