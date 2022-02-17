@@ -8,25 +8,16 @@ export default function BusstopEditor({open, handleClose, busstop, setBusstop}) 
     const stopName = useRef(null);
 
     function saveBusstop() {
-        setBusstop(busstop);
+        setBusstop(busstop, stopName.current, wifiCheck.current);
         handleClose();
     }
 
     function setBusstopName(stopname) {
-        if (busstop) {
-            setBusstop({...busstop, name: stopname});
-        } else {
-            setBusstop({name: stopname, hasWifi: wifiCheck.current});
-        }
-        console.log(busstop);
+        stopName.current = stopname;
     }
 
     function setWifi(wifi) {
-        if (busstop) {
-            setBusstop({...busstop, hasWifi: wifi});
-        } else {
-            setBusstop({name: stopName.current, hasWifi: wifi});
-        }
+        wifiCheck.current = wifi; 
     }
 
     return <>

@@ -46,19 +46,27 @@ export default function BusstopOverview({isAdmin}) {
         setSelectedBusstop(undefined);
     }
 
-    function setEditedBusstop(stop) {
-        let existingStop = allBusstops.filter(busstop => busstop.name == stop.name)[0];
-        if (existingStop) {
+    function setEditedBusstop(stop, stopname, hasWifi) {
+        if (stop) {
+            let existingStop = allBusstops.filter(busstop => busstop.name == stop.name)[0];
+            let editedStop;
+            if (stopname) {
+                editedStop = {...existingStop, name: stopname};
+            } else {
+                editedStop = {...existingStop, hasWifi: hasWifi};
+            }
             let index = allBusstops.indexOf(existingStop);
             let editedBusstops = [...allBusstops];
-            editedBusstops.splice(index, 1, stop);
+            editedBusstops.splice(index, 1, editedStop);
             setAllBusstops(editedBusstops);
         } else {
+            let newStop = {name: stopname, hasWifi: hasWifi};
             let newList = [...allBusstops];
-            newList.push(stop);
+            newList.push(newStop);
             setAllBusstops(newList);
         }
         setSelectedBusstop(stop);
+        onBusstopSearch("");
     }
 
     return <>
