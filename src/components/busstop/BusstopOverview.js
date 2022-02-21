@@ -4,6 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import React, { useState } from "react";
 import './BusstopOverview.css';
 import BusstopEditor from "./BusstopEditor";
+import sleep from "../../utils/Timer";
 
 export default function BusstopOverview({isAdmin}) {
     const [allBusstops, setAllBusstops] = useState([
@@ -20,9 +21,10 @@ export default function BusstopOverview({isAdmin}) {
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusstop, setSelectedBusstop] = useState(undefined);
     const [search, setSearch] = useState(undefined);
+    const [originalStop, setOriginalStop] = useState(undefined);
 
     function addBusstop() {
-        setSelectedBusstop(undefined);
+        setSelectedBusstop({name: null, hasWifi: false});
         setEditorOpen(true);
     }
 
@@ -32,7 +34,8 @@ export default function BusstopOverview({isAdmin}) {
     }
 
     function onSelectBusstop(stop) {
-        setSelectedBusstop(stop);
+        setSelectedBusstop({...stop});
+        setOriginalStop(stop);
         if (isAdmin) {
             setEditorOpen(true);
         } else {
@@ -52,21 +55,23 @@ export default function BusstopOverview({isAdmin}) {
             let editedStop;
             if (stopname) {
                 editedStop = {...existingStop, name: stopname};
-            } else {
-                editedStop = {...existingStop, hasWifi: hasWifi};
+            } 
+            if (hasWifi) {
+                editedStop = {...editedStop, hasWifi: hasWifi};
             }
             let index = allBusstops.indexOf(existingStop);
             let editedBusstops = [...allBusstops];
             editedBusstops.splice(index, 1, editedStop);
             setAllBusstops(editedBusstops);
+            setDisplayedBusstops(editedBusstops);
         } else {
             let newStop = {name: stopname, hasWifi: hasWifi};
             let newList = [...allBusstops];
             newList.push(newStop);
             setAllBusstops(newList);
+            setDisplayedBusstops(newList);
         }
         setSelectedBusstop(stop);
-        onBusstopSearch("");
     }
 
     return <>
@@ -80,7 +85,7 @@ export default function BusstopOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusstop()}>
                             Hinzufügen
                         </Button>
-                        <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop} setBusstop={(stop) => setEditedBusstop(stop)} />
+                        <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop}  originalStop={originalStop} setDisplayedBusstop={(stop) => setSelectedBusstop(stop)} setBusstop={(stop, stopname, hasWifi) => setEditedBusstop(stop, stopname, hasWifi)} />
                     </div>
                 }
                 <div className='search'>
