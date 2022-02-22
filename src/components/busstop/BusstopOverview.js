@@ -30,7 +30,7 @@ export default function BusstopOverview({isAdmin}) {
 
     function onBusstopSearch(searchInput) {
         setSearch(searchInput);
-        setDisplayedBusstops(allBusstops.filter(stop => stop.name.includes(searchInput)));
+        setDisplayedBusstops(allBusstops.filter(stop => stop.name.toLowerCase().includes(searchInput.toLowerCase())));
     }
 
     function onSelectBusstop(stop) {

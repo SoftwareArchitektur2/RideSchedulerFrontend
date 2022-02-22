@@ -27,7 +27,7 @@ export default function BuslineOverview({isAdmin}) {
     const [displayedBuslines, setDisplayedBuslines] = useState(allBuslines);
 
     function onBusSearch(value) {
-        setDisplayedBuslines(allBuslines.filter(bus => bus.name.includes(value)));
+        setDisplayedBuslines(allBuslines.filter(bus => bus.name.toLowerCase().includes(value.toLowerCase())));
     }
 
     function onSelectBusline(busline) {
