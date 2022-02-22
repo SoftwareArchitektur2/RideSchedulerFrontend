@@ -8,10 +8,12 @@ import { useHistory } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import BuslineEditor from './BuslineEditor';
 import BuslineDetail from './BuslineDetail';
+import ScheduleEditor from './schedule/ScheduleEditor';
 
 export default function BuslineOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
+    const [scheduleEditorOpen, setScheduleEditorOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
     const [displayedName, setDisplayedName] = useState(undefined);
     const [allBuslines, setAllBuslines] = useState([
@@ -48,6 +50,7 @@ export default function BuslineOverview({isAdmin}) {
         setEditorOpen(false);
         setDetailOpen(false);
         setSelectedBusline(undefined);
+        setScheduleEditorOpen(false);
     }
 
     function setNameForBusline(buslineName) {
@@ -58,6 +61,11 @@ export default function BuslineOverview({isAdmin}) {
             allBuslines.push({id: allBuslines[allBuslines.length - 1].id + 1, name: buslineName});
         }
         onBusSearch("");
+    }
+
+    function openScheduleEditor() {
+        setEditorOpen(false);
+        setScheduleEditorOpen(true);
     }
 
     return <>
@@ -97,13 +105,23 @@ export default function BuslineOverview({isAdmin}) {
                     <TableHead>
                         <TableRow>
                             <TableCell className='tableheader'>Nummer</TableCell>
+                            {isAdmin &&
+                                <TableCell className='tableheader'>Fahrplan</TableCell>
+                            }
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {
                             displayedBuslines.map((line) => (
-                                <TableRow key={line.name} className='tablerow' onClick={(event) => onSelectBusline(line.name)}>
-                                    <TableCell>{line.name}</TableCell>
+                                <TableRow key={line.name} className='tablerow'>
+                                    <TableCell onClick={(event) => onSelectBusline(line.name)}>{line.name}</TableCell>
+                                    {isAdmin &&
+                                    <>
+                                        <TableCell>
+                                            <Button variant='contained' className='scheduleButton' onClick={() => openScheduleEditor()}>Fahrplan bearbeiten</Button>
+                                        </TableCell>
+                                        <ScheduleEditor open={scheduleEditorOpen} name={line.name} handleClose={() => closeDialogs()}></ScheduleEditor>
+                                    </>}
                                 </TableRow>
                             ))
                         }
