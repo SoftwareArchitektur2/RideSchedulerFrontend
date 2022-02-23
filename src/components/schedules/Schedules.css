@@ -1,0 +1,18 @@
+.tableheader {
+    background-color: darkgray;
+    border-bottom: 2px black;
+    font-weight: bold;
+}
+
+.tablerowSchedules:nth-of-type(odd) {
+    background-color: rgb(233, 232, 231);
+}
+
+.tablerowSchedules:last-child td :last-child th {
+    border: 0;
+}
+
+.tablebutton {
+    background-color: grey !important;
+    line-height: 0 !important;
+}

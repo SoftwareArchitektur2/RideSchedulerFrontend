@@ -75,7 +75,7 @@ export default function BusstopOverview({isAdmin}) {
     }
 
     return <>
-         <Box>
+        <Box>
             <Typography variant='h4' sx={{'marginLeft': '25%'}}>Übersicht über die Haltestellen</Typography>
         </Box>
         <Box sx={{flexGrow: 1}}>
