@@ -8,6 +8,7 @@ import './AddSchedule.css';
 export default function AddSchedule({open, handleClose, saveSchedule}) {
     const [schedule, setSchedule] = useState({line: "", startingTime: "", lastStop: {name: ""}});    
     const [startingTime, setStartingTime] = useState(null);
+    const [lastStopDisabled, setLastStopDisabled] = useState(true);
     const [mockStops, setMockStops] = useState([
         {name: "Tibusstraße", hasWifi: false},
         {name: "Altstadt/Bült", hasWifi: true},
@@ -35,7 +36,13 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     function onHandleClose() {
         setSchedule({line: "", startingTime: "", lastStop: {name: ""}});
         setStartingTime(null);
+        setLastStopDisabled(true);
         handleClose();
+    }
+
+    function onLineChange(line) {
+        setSchedule({...schedule, line: line});
+        setLastStopDisabled(false)
     }
 
     return <>
@@ -52,7 +59,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                             value={schedule.line}
                             labelId="lineLabel"
                             label="Buslinie"
-                            onChange={(event) => setSchedule({...schedule, line: event.target.value})}
+                            onChange={(event) => onLineChange(event.target.value)}
                         >
                             { mockLines.map(line =>
                                 <MenuItem value={line.name}>{line.name}</MenuItem>
@@ -74,6 +81,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                             label="Endhaltestelle"
                             labelId="stopLabel"
                             onChange={(event) => setSchedule({...schedule, lastStop: {...schedule.lastStop, name: event.target.value}})}
+                            disabled={lastStopDisabled}
                         >
                             { mockStops.map(stop =>
                                 <MenuItem value={stop.name}>{stop.name}</MenuItem>
