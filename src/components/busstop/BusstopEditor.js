@@ -13,7 +13,7 @@ export default function BusstopEditor({open, handleClose, originalStop, busstop,
     return <>
         {busstop &&
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle className="busstopEditorTitle">Buslinien-Editor</DialogTitle>
+                <DialogTitle className="busstopEditorTitle">Haltstellen-Editor</DialogTitle>
                 <DialogContent className="editorContent">
                     <DialogContentText>
                         {busstop ? 'Haltestelle editieren' : 'Haltestelle anlegen'}
