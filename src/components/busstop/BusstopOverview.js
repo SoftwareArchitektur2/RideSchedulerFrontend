@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import './BusstopOverview.css';
 import BusstopEditor from "./BusstopEditor";
 import sleep from "../../utils/Timer";
+import BusstopDetail from "./BusstopDetail";
 
 export default function BusstopOverview({isAdmin}) {
     const [allBusstops, setAllBusstops] = useState([
@@ -88,6 +89,8 @@ export default function BusstopOverview({isAdmin}) {
                         <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop}  originalStop={originalStop} setDisplayedBusstop={(stop) => setSelectedBusstop(stop)} setBusstop={(stop, stopname, hasWifi) => setEditedBusstop(stop, stopname, hasWifi)} />
                     </div>
                 }
+                <BusstopDetail open={detailOpen} handleClose={()=> closeDialogs()} busstop={selectedBusstop} />
+
                 <div className='search'>
                     <div className='searchIconWrapper'>
                         <SearchIcon />

@@ -11,7 +11,7 @@ export default function Footer({setMenuFunction, isAdmin, setIsAdminFunction}) {
         if (!isAdmin/*Somehow admin is set after the function*/) {
             setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrpläne", link: "/schedules"}, {text: "Menü4", link: "/"}]);
         } else {
-            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Menü2", link: "/"}, {text: "Fahrplanauskunft", link: "/"}, {text: "Menü4", link: "/"}]);
+            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrplanauskunft", link: "/"}, {text: "Menü4", link: "/"}]);
         }
     }
 
