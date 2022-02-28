@@ -1,7 +1,7 @@
 import { Autocomplete, Box, Button, IconButton, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Toolbar, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import InputMask from 'react-input-mask';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './BuslineOverview.css';
 import { useHistory } from 'react-router-dom';
@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BuslineEditor from './BuslineEditor';
 import BuslineDetail from './BuslineDetail';
 import ScheduleEditor from './schedule/ScheduleEditor';
+import getAllBuslines from '../../api/ApiService';
 
 export default function BuslineOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
@@ -23,6 +24,16 @@ export default function BuslineOverview({isAdmin}) {
         {id: 3, name: "16"},
         {id: 4, name: "22"}
     ]);
+
+    useEffect(() => {
+      const fetchBuslines = async () => {
+          const buslines = await getAllBuslines();
+          console.log(buslines);
+          setAllBuslines(buslines);
+      }
+      fetchBuslines();
+    }, []);
+    
 
     const [displayedBuslines, setDisplayedBuslines] = useState(allBuslines);
 
