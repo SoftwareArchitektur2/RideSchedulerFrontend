@@ -48,6 +48,7 @@ export default function BusstopOverview({isAdmin}) {
         setEditorOpen(false);
         setDetailOpen(false);
         setSelectedBusstop(undefined);
+        
     }
 
     function setEditedBusstop(stop, stopname, hasWifi) {
