@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import BuslineEditor from './BuslineEditor';
 import BuslineDetail from './BuslineDetail';
 import ScheduleEditor from './schedule/ScheduleEditor';
-import getAllBuslines from '../../api/ApiService';
+import { ApiService } from '../../api/ApiService';
 
 export default function BuslineOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
@@ -17,19 +17,16 @@ export default function BuslineOverview({isAdmin}) {
     const [scheduleEditorOpen, setScheduleEditorOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
     const [displayedName, setDisplayedName] = useState(undefined);
-    const [allBuslines, setAllBuslines] = useState([
-        {id: 0, name: "1"},
-        {id: 1, name: "11"},
-        {id: 2, name: "15"},
-        {id: 3, name: "16"},
-        {id: 4, name: "22"}
-    ]);
+    const [allBuslines, setAllBuslines] = useState([]);
+    const [busStops, setBusStops] = useState([]);
+
+    const apiService = new ApiService();
 
     useEffect(() => {
       const fetchBuslines = async () => {
-          const buslines = await getAllBuslines();
-          console.log(buslines);
-          setAllBuslines(buslines);
+          const buslines = await apiService.getAllBuslines();
+          setAllBuslines(buslines.data);
+          setDisplayedBuslines(buslines.data);
       }
       fetchBuslines();
     }, []);
@@ -41,7 +38,10 @@ export default function BuslineOverview({isAdmin}) {
         setDisplayedBuslines(allBuslines.filter(bus => bus.name.toLowerCase().includes(value.toLowerCase())));
     }
 
-    function onSelectBusline(busline) {
+    function onSelectBusline(busline, buslineId) {
+        apiService.getStopsForLine(buslineId).then((busstops) => {
+            setBusStops(busstops.data);
+        });
         setSelectedBusline(busline);
         setDisplayedName(busline + "");
         if (isAdmin) {
@@ -61,6 +61,7 @@ export default function BuslineOverview({isAdmin}) {
         setEditorOpen(false);
         setDetailOpen(false);
         setSelectedBusline(undefined);
+        setBusStops([]);
         setScheduleEditorOpen(false);
     }
 
@@ -90,23 +91,18 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setNameForBusline} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
+                        <BuslineEditor open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setNameForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
                     </div>
                 }
                 <div className='search'>
                     <div className='searchIconWrapper'>
                         <SearchIcon />
                     </div>
-                    <InputMask
-                        mask="9999"
-                        maskChar={null}
-                    >
-                        {() => <InputBase
+                    <InputBase
                             placeholder='Buslinien-Nr.'
                             className='searchfield'
                             onInput={(event) => onBusSearch(event.target.value)}
-                        />}
-                    </InputMask>
+                    />
                 </div>
             </Toolbar>
         </Box>
@@ -125,7 +121,7 @@ export default function BuslineOverview({isAdmin}) {
                         {
                             displayedBuslines.map((line) => (
                                 <TableRow key={line.name} className='tablerow'>
-                                    <TableCell onClick={(event) => onSelectBusline(line.name)}>{line.name}</TableCell>
+                                    <TableCell onClick={(event) => onSelectBusline(line.name, line.id)}>{line.name}</TableCell>
                                     {isAdmin &&
                                     <>
                                         <TableCell>
@@ -140,6 +136,6 @@ export default function BuslineOverview({isAdmin}) {
                 </Table>
             </TableContainer>
         </Box>
-        <BuslineDetail open={detailOpen} busline={selectedBusline} handleClose={() => closeDialogs()}></BuslineDetail>
+        <BuslineDetail open={detailOpen} busline={selectedBusline} busstops={busStops} handleClose={() => closeDialogs()}></BuslineDetail>
     </>;
 }
