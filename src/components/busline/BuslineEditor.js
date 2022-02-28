@@ -6,15 +6,7 @@ import './BuslineEditor.css';
 import { DataGrid } from "@mui/x-data-grid";
 import { ApiService } from "../../api/ApiService";
 
-export default function BuslineEditor({open, name, handleClose, setName, displayedName, setDisplayedName, busstops}) {
-
-    // const [busstops, setBusstops] = useState([{name: "Tibusstraße", hasWifi: false},
-    //                                           {name: "Altstadt/Bült", hasWifi: true},
-    //                                           {name: "Eisenbahnstraße", hasWifi: false},
-    //                                           {name: "Hauptbahnhof", hasWifi: true},
-    //                                           {name: "Domplatz", hasWifi: true},
-    //                                           {name: "Hüfferstiftung", hasWifi: false},
-    //                                           {name: "Aegidiimarkt", hasWifi: true}]);
+export default function BuslineEditor({open, name, handleClose, setName, displayedName, setDisplayedName, busstops, id}) {
 
     const [allBusstops, setAllBusstops] = useState([]);
     const apiService = new ApiService();
@@ -29,8 +21,12 @@ export default function BuslineEditor({open, name, handleClose, setName, display
       }, [busstops]);
 
     function saveBusline() {
+        if (name) {
+            apiService.updateBusline(displayedName, id);
+        } else {
+            apiService.saveBusline(displayedName);
+        }
         setName(displayedName);
-        //TODO service calls
         handleClose();
     }
 

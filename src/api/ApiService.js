@@ -35,4 +35,32 @@ export class ApiService {
             }
         });
     }
+
+    saveBusline(buslinename) {
+        return axios({
+            method: 'post',
+            url: BASEPATH + '/busLines/',
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                name: buslinename
+            }
+        });
+    }
+
+    updateBusline(buslinename, buslineid) {
+        return axios({
+            method: 'patch',
+            url: BASEPATH + '/busLines/' + buslineid,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                name: buslinename
+            }
+        });
+    }
 }
