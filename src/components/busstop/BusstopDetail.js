@@ -1,25 +1,45 @@
 import {Autocomplete, Toolbar,InputBase, Button,Box,  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,  Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, FormControlLabel, FormGroup, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputMask from 'react-input-mask';
-import React, { useRef, useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import moment from 'moment'
 import './BusstopDetail.css';
+import { ApiService } from "../../api/ApiService";
 
 export default function BusstopDetail({open, handleClose,  busstop}) {
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
-  
-    const [allBuslines, setAllBuslines] = useState([
-        {id: 0, name: "1"},
-        {id: 1, name: "11"},
-        {id: 2, name: "15"},
-        {id: 3, name: "16"},
-        {id: 4, name: "22"}
-    ]);
+    const apiService = new ApiService();
+    const [allBuslines, setAllBuslines] = useState([]);
+    const [allSchedules, setAllSchedules] = useState([]);
 
     const [displayedBuslines, setDisplayedBuslines] = useState(allBuslines);
-    
+    useEffect(() => {
+        const fetchBusstops = async () => {
+            const res = await apiService.getLinesForStops(busstop.id);
+            setAllBuslines(res.data);
+            setDisplayedBuslines(res.data);
+        }
+        fetchBusstops();
+      }, [busstop]);
 
+      useEffect(() => {
+        const fetchTimes = async () => {
+            const res = await apiService.getSchedulesForBusStop( selectedBusline.id,busstop.id);
+            
+            setAllSchedules(res.data.map(schedule=>getdepartureTimeFromSchedule(schedule)));
+            
+        }
+        fetchTimes();
+      }, [selectedBusline]);
+ function getdepartureTimeFromSchedule(schedule){
+     if(schedule.departureTime.length>10){
+         return {...schedule,departureTime:moment(schedule.departureTime,"YYYY-MM-DD[T]HH:mm:ss[.000+00:00]").format("HH:mm")} 
+     }else {
+         return  {...schedule,departureTime:moment(schedule.departureTime,"HH:mm:ss").format("HH:mm")} 
+     }
+    
+ }
     function onBusSearch(value) {
         setDisplayedBuslines(allBuslines.filter(bus => bus.name.toLowerCase().includes(value.toLowerCase())));
     }
@@ -40,7 +60,7 @@ export default function BusstopDetail({open, handleClose,  busstop}) {
     return <>
         {busstop &&
             <Dialog open={open} onClose={()=>close()} >
-                <DialogTitle className="busstopDetailTitle">BusStop-Editor</DialogTitle>
+                <DialogTitle className="busstopDetailTitle">Fahrplan</DialogTitle>
                 <DialogContent className="detailContent">
                     <DialogContentText>
                         {`Haltestelle: ${busstop.name}` }
@@ -75,8 +95,8 @@ export default function BusstopDetail({open, handleClose,  busstop}) {
                     <TableBody>
                         {
                             displayedBuslines.map((line) => (
-                                <TableRow key={line.name} className='tablerow'>
-                                    <TableCell onClick={(event) => onSelectBusline(line.name)}>{line.name}</TableCell>
+                                <TableRow key={line.id} className='tablerow'>
+                                    <TableCell onClick={(event) => onSelectBusline(line)}>{line.name}</TableCell>
                                     
                                 </TableRow>
                             ))
@@ -91,15 +111,15 @@ export default function BusstopDetail({open, handleClose,  busstop}) {
              <Table aria-label="Verfügbare Linien">
                  <TableHead>
                      <TableRow>
-                         <TableCell className='tableheader'>{"Fahrzeit Line "+ selectedBusline}</TableCell>
+                         <TableCell className='tableheader'>{"Abfahrtszeiten "+ selectedBusline.name}</TableCell>
                       
                      </TableRow>
                  </TableHead>
                  <TableBody>
                      {
-                         displayedBuslines.map((line) => (
-                             <TableRow key={line.name} className='tablerow'>
-                                 <TableCell >{line.name}</TableCell>
+                         allSchedules.map((line) => (
+                             <TableRow key={line.departureTime} className='tablerowSchedules'>
+                                 <TableCell >{line.departureTime}</TableCell>
                                  
                              </TableRow>
                          ))
