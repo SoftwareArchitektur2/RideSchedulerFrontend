@@ -21,7 +21,7 @@ export default function Footer({setMenuFunction, isAdmin, setIsAdminFunction}) {
     }
 
     return <>
-        <div style={{'display': 'flex'}}>
+    <div style={{'display': 'flex'}}>
         <Grid container spacing={0} className='footer'>
             <Grid item xs={9}></Grid>
             <Grid item xs={3} className='footerLeft' justifyContent="flex-end" onClick={() => switchMenu()}>

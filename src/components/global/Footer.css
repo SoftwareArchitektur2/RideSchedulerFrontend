@@ -3,7 +3,7 @@
     width: 100vw;
     min-height: 2vh;
     margin-top: 5%;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
 }
 

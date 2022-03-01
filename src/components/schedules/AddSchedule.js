@@ -1,40 +1,48 @@
 import { TimePicker } from "@mui/lab";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
+import { ApiService } from "../../api/ApiService";
 
 import './AddSchedule.css';
 
 export default function AddSchedule({open, handleClose, saveSchedule}) {
-    const [schedule, setSchedule] = useState({line: "", startingTime: "", lastStop: {name: ""}});    
+    const [schedule, setSchedule] = useState({line: null, startingTime: null, lastStop: {name: null, id: null}});    
     const [startingTime, setStartingTime] = useState(null);
     const [lastStopDisabled, setLastStopDisabled] = useState(true);
-    const [mockStops, setMockStops] = useState([
-        {name: "Tibusstraße", hasWifi: false},
-        {name: "Altstadt/Bült", hasWifi: true},
-        {name: "Eisenbahnstraße", hasWifi: false},
-        {name: "Hauptbahnhof", hasWifi: true},
-        {name: "Domplatz", hasWifi: true},
-        {name: "Hüfferstiftung", hasWifi: false},
-        {name: "Aegidiimarkt", hasWifi: true}
-    ]);
-    const [mockLines, setMockLines] = useState([
-        {id: 0, name: "1"},
-        {id: 1, name: "11"},
-        {id: 2, name: "15"},
-        {id: 3, name: "16"},
-        {id: 4, name: "22"}
-    ]);
+    const [busstops, setBusstops] = useState([]);
+    const [buslines, setBuslines] = useState([]);
+
+    const apiService = new ApiService();
+
+    useEffect(() => {
+      const fetchBuslines = async () => {
+          const fetchedBuslines = await apiService.getAllBuslines();
+          setBuslines(fetchedBuslines.data);
+      }
+      fetchBuslines();
+    }, []);
+
+    useEffect(() => {
+        if (schedule.line) {
+            const fetchBusstops = async () => {
+                const fetchedBusstops= await apiService.getDestinationsStopsForLine(schedule.line.id);
+                setBusstops(fetchedBusstops.data);
+            }
+            fetchBusstops();
+        }
+    }, [lastStopDisabled]);
 
     function onSaveSchedule() {
-        let finalSchedule = {...schedule, startingTime: startingTime.format('H:mm')};
-        saveSchedule(finalSchedule);
-        //TODO save service call
-        onHandleClose();
+        let finalSchedule = {...schedule, startingTime: startingTime.format('HH:mm:ss')};
+        apiService.saveSchedule(finalSchedule).then(res => {
+            saveSchedule(finalSchedule);
+            onHandleClose(); 
+        });
     }
 
     function onHandleClose() {
-        setSchedule({line: "", startingTime: "", lastStop: {name: ""}});
+        setSchedule({line: null, startingTime: null, lastStop: {name: null, id: null}});
         setStartingTime(null);
         setLastStopDisabled(true);
         handleClose();
@@ -61,12 +69,13 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                             label="Buslinie"
                             onChange={(event) => onLineChange(event.target.value)}
                         >
-                            { mockLines.map(line =>
-                                <MenuItem value={line.name}>{line.name}</MenuItem>
+                            { buslines.map(line =>
+                                <MenuItem value={line}>{line.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
                     <TimePicker
+                        fullWidth
                         label="Startzeit"
                         ampm={false}
                         value={startingTime}
@@ -77,14 +86,14 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                         <InputLabel id="stopLabel">Endhaltestelle</InputLabel>
                         <Select
                             fullWidth
-                            value={schedule.lastStop.name}
+                            value={schedule.lastStop}
                             label="Endhaltestelle"
                             labelId="stopLabel"
-                            onChange={(event) => setSchedule({...schedule, lastStop: {...schedule.lastStop, name: event.target.value}})}
+                            onChange={(event) => setSchedule({...schedule, lastStop: event.target.value})}
                             disabled={lastStopDisabled}
                         >
-                            { mockStops.map(stop =>
-                                <MenuItem value={stop.name}>{stop.name}</MenuItem>
+                            { busstops.map(stop =>
+                                <MenuItem value={stop}>{stop.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>

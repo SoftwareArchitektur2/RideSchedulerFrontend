@@ -1,28 +1,31 @@
 import { Box, Button, InputBase, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './BusstopOverview.css';
 import BusstopEditor from "./BusstopEditor";
 import sleep from "../../utils/Timer";
 import BusstopDetail from "./BusstopDetail";
+import { ApiService } from "../../api/ApiService";
 
 export default function BusstopOverview({isAdmin}) {
-    const [allBusstops, setAllBusstops] = useState([
-        {name: "Tibusstraße", hasWifi: false},
-        {name: "Altstadt/Bült", hasWifi: true},
-        {name: "Eisenbahnstraße", hasWifi: false},
-        {name: "Hauptbahnhof", hasWifi: true},
-        {name: "Domplatz", hasWifi: true},
-        {name: "Hüfferstiftung", hasWifi: false},
-        {name: "Aegidiimarkt", hasWifi: true}
-    ]);
+    const [allBusstops, setAllBusstops] = useState([]);
     const [displayedBusstops, setDisplayedBusstops] = useState(allBusstops);
     const [editorOpen, setEditorOpen] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusstop, setSelectedBusstop] = useState(undefined);
     const [search, setSearch] = useState(undefined);
     const [originalStop, setOriginalStop] = useState(undefined);
+    
+    const apiService = new ApiService()
+    useEffect(() => {
+        const fetchBusstops = async () => {
+            const busstops = await apiService.getAllBusstops();
+            setAllBusstops(busstops.data);
+            setDisplayedBusstops(busstops.data);
+        }
+        fetchBusstops();
+      }, []);
 
     function addBusstop() {
         setSelectedBusstop({name: null, hasWifi: false});
@@ -48,7 +51,7 @@ export default function BusstopOverview({isAdmin}) {
         setEditorOpen(false);
         setDetailOpen(false);
         setSelectedBusstop(undefined);
-        
+        setOriginalStop(undefined);
     }
 
     function setEditedBusstop(stop, stopname, hasWifi) {
@@ -105,7 +108,7 @@ export default function BusstopOverview({isAdmin}) {
                 </div>
             </Toolbar>
         </Box>
-        <Box>
+        <Box sx={{marginBottom: '5vh'}}>
             <TableContainer component={Paper} sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
                 <Table aria-label="Verfügbare Haltestellen">
                     <TableHead>

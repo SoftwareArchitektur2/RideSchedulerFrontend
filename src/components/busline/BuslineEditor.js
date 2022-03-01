@@ -45,21 +45,14 @@ export default function BuslineEditor({open, name, handleClose, setName, display
                     <DialogContentText>
                         {name ? `Buslinie ${name} editieren` : "Neue Buslinie anlegen"}
                     </DialogContentText>
-                    <InputMask
-                        mask="9999"
-                        maskChar={null}
-                        value={displayedName}
-                        onChange={(e) => setDisplayedName(e.target.value)}
-                    >
-                        {() =>
                             <TextField
                                 variant="outlined"
                                 label="Buslinien-Nr."
                                 style={{'color': 'black'}}
                                 className="buslineInput"
+                                value={displayedName}
+                                onChange={(e) => setDisplayedName(e.target.value)}
                             />
-                        }
-                    </InputMask>
                     <div className="busstopTable">
                         <DataGrid
                             rows={allBusstops}

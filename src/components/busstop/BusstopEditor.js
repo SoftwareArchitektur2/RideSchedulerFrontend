@@ -1,13 +1,26 @@
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, TextField } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { ApiService } from "../../api/ApiService";
 
 import './BusstopEditor.css';
 
 export default function BusstopEditor({open, handleClose, originalStop, busstop, setBusstop, setDisplayedBusstop}) {
 
+    const apiService = new ApiService();
+
     function saveBusstop() {
-        setBusstop(originalStop, busstop.name, busstop.hasWifi);
-        handleClose();
+        serviceCallSaveStop().then(res => {
+            setBusstop(originalStop, busstop.name, busstop.hasWifi);
+            handleClose();
+        }); 
+    }
+
+    function serviceCallSaveStop() {
+        if (originalStop) {
+            return apiService.updateBusstop(busstop);
+        } else {
+            return apiService.saveBusstop(busstop);
+        }
     }
 
     return <>
@@ -27,7 +40,7 @@ export default function BusstopEditor({open, handleClose, originalStop, busstop,
                         value={busstop.name}
                     />
                     <FormGroup>
-                        <FormControlLabel control={<Checkbox value={busstop.hasWifi} onChange={(event) => setDisplayedBusstop({...busstop, hasWifi: event.target.checked})}/>} label="WLan vorhanden" />
+                        <FormControlLabel control={<Checkbox checked={busstop.hasWifi} onChange={(event) => setDisplayedBusstop({...busstop, hasWifi: event.target.checked})}/>} label="WLan vorhanden" />
                     </FormGroup>
                 </DialogContent> 
                 <DialogActions>

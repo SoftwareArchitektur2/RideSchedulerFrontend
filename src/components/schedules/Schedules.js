@@ -7,10 +7,10 @@ import AddSchedule from './AddSchedule';
 
 export default function Schedules({isAdmin}) {
     const [schedules, setSchedules] = useState([
-        {line: 1, startingTime: "8:01", lastStop: {name: "Tibusstraße"}},
-        {line: 11, startingTime: "11:01", lastStop: {name: "Altstadt/Bült"}},
-        {line: 15, startingTime: "12:01", lastStop: {name: "Domplatz"}},
-        {line: 16, startingTime: "13:01", lastStop: {name: "Münster Hbf"}}
+        {id: 0, line: {id: 0, name: 1}, startingTime: "8:01", lastStop: {name: "Tibusstraße"}},
+        {id: 1, line: {id: 1, name: 11}, startingTime: "11:01", lastStop: {name: "Altstadt/Bült"}},
+        {id: 2, line: {id: 2, name: 15}, startingTime: "12:01", lastStop: {name: "Domplatz"}},
+        {id: 3, line: {id: 3, name: 16}, startingTime: "13:01", lastStop: {name: "Münster Hbf"}}
     ]);
     const [addScheduleOpen, setAddScheduleOpen] = useState(false);
 
@@ -53,8 +53,8 @@ export default function Schedules({isAdmin}) {
                     <TableBody>
                         {
                             schedules.map((schedule) => (
-                                <TableRow key={schedule.line} className='tablerowSchedules'>
-                                    <TableCell>{schedule.line}</TableCell>
+                                <TableRow key={schedule.id} className='tablerowSchedules'>
+                                    <TableCell>{schedule.line.name}</TableCell>
                                     <TableCell>{schedule.startingTime}</TableCell>
                                     <TableCell>{schedule.lastStop.name}</TableCell>
                                 </TableRow>

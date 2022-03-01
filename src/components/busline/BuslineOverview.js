@@ -108,7 +108,7 @@ export default function BuslineOverview({isAdmin}) {
                 </div>
             </Toolbar>
         </Box>
-        <Box>
+        <Box sx={{marginBottom: '5vh'}}>
             <TableContainer component={Paper} sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
                 <Table aria-label="Verfügbare Linien">
                     <TableHead>

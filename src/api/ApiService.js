@@ -63,4 +63,61 @@ export class ApiService {
             }
         });
     }
+
+    saveBusstop(busstop) {
+        return axios({
+            method: 'post',
+            url: BASEPATH + "/busStops/",
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                name: busstop.name,
+                hasWifi: busstop.hasWifi
+            }
+        })
+    }
+
+    updateBusstop(busstop) {
+        return axios({
+            method: 'patch',
+            url: BASEPATH + '/busStops/' + busstop.id,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                name: busstop.name,
+                hasWifi: busstop.hasWifi
+            }
+        });
+    }
+
+    getDestinationsStopsForLine(buslineid) {
+        return axios({
+            method: 'get',
+            url: `${BASEPATH}/busLines/${buslineid}/destinationStops`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
+
+    saveSchedule(schedule) {
+        return axios({
+            method: 'post',
+            url: BASEPATH + "/schedules/",
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                busLineId: schedule.line.id,
+                departureTime: schedule.startingTime,
+                destinationStopId: schedule.lastStop.id
+            }
+        });
+    }
 }
