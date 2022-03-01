@@ -4,15 +4,6 @@ import { useState } from "react";
 import './BuslineDetail.css';
 
 export default function BuslineDetail({open, busline, handleClose, busstops}) {
-    // const [busstops, setBusstops] = useState([
-    //     {name: "Tibusstraße", hasWifi: false},
-    //     {name: "Altstadt/Bült", hasWifi: true},
-    //     {name: "Eisenbahnstraße", hasWifi: false},
-    //     {name: "Hauptbahnhof", hasWifi: true},
-    //     {name: "Domplatz", hasWifi: true},
-    //     {name: "Hüfferstiftung", hasWifi: false},
-    //     {name: "Aegidiimarkt", hasWifi: true}
-    // ]);
     
     return <>
         {busline &&
@@ -25,7 +16,10 @@ export default function BuslineDetail({open, busline, handleClose, busstops}) {
                     <div className="busstopTable">
                         <ul className="busstops">
                             {busstops.map(stop => 
-                                <li>{stop.name}</li>    
+                                <>
+                                <li>{stop.name}</li>
+                                <li>{`${stop.timeToNextStop} min`}</li>
+                                </>   
                             )}
                         </ul>
                     </div>

@@ -14,12 +14,13 @@
 ul.busstops li {
     position:relative; 
     margin-bottom: 0;
-    padding-bottom: 2.5em;
+    padding-bottom: 2vh;
     font-family: 'Roboto';
 }
 
 ul.busstops li:last-child {
     padding-bottom: 0px;
+    display: none;
 }
 
 ul.busstops li:after {
@@ -44,6 +45,16 @@ ul.busstops li:first-child:before {
    top: 6px; /* moves the line down so that it disappears under the bullet. Adjust manually */
 }
 
-ul.busstops li:last-child:before {
+ul.busstops li:nth-last-child(2):before {
    height: 6px; /* shorten the line so it goes only up to the bullet. Is equal to first-child:before's top */
+}
+
+ul.busstops li:nth-child(even):after {
+    content: none;
+}
+
+ul.busstops li:nth-child(even) {
+    list-style-type: none;
+    color: grey;
+    font-size: smaller;
 }
