@@ -10,6 +10,7 @@ import BuslineEditor from './BuslineEditor';
 import BuslineDetail from './BuslineDetail';
 import ScheduleEditor from './schedule/ScheduleEditor';
 import { ApiService } from '../../api/ApiService';
+import AddStopDialog from './addStopDialog/AddStopDialog';
 
 export default function BuslineOverview({isAdmin}) {
     const [editorOpen, setEditorOpen] = useState(false);
@@ -77,8 +78,10 @@ export default function BuslineOverview({isAdmin}) {
         onBusSearch("");
     }
 
-    function openScheduleEditor() {
+    function openScheduleEditor(line) {
         setEditorOpen(false);
+        setDetailOpen(false);
+        setSelectedBusline(line);
         setScheduleEditorOpen(true);
     }
 
@@ -115,7 +118,7 @@ export default function BuslineOverview({isAdmin}) {
                         <TableRow>
                             <TableCell className='tableheader'>Nummer</TableCell>
                             {isAdmin &&
-                                <TableCell className='tableheader'>Fahrplan</TableCell>
+                                <TableCell className='tableheader'></TableCell>
                             }
                         </TableRow>
                     </TableHead>
@@ -127,9 +130,9 @@ export default function BuslineOverview({isAdmin}) {
                                     {isAdmin &&
                                     <>
                                         <TableCell>
-                                            <Button variant='contained' className='scheduleButton' onClick={() => openScheduleEditor()}>Fahrplan bearbeiten</Button>
+                                            <Button variant='contained' className='scheduleButton' onClick={() => openScheduleEditor(line)}>Haltestelle hinzufügen</Button>
                                         </TableCell>
-                                        <ScheduleEditor open={scheduleEditorOpen} name={line.name} handleClose={() => closeDialogs()}></ScheduleEditor>
+                                        {/* <ScheduleEditor open={scheduleEditorOpen} name={line.name} handleClose={() => closeDialogs()}></ScheduleEditor> */}
                                     </>}
                                 </TableRow>
                             ))
@@ -138,6 +141,7 @@ export default function BuslineOverview({isAdmin}) {
                 </Table>
             </TableContainer>
         </Box>
+        <AddStopDialog open={scheduleEditorOpen} line={selectedBusline} handleClose={() => closeDialogs()}></AddStopDialog>
         <BuslineDetail open={detailOpen} busline={selectedBusline} busstops={busStops} handleClose={() => closeDialogs()}></BuslineDetail>
     </>;
 }

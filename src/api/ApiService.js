@@ -25,6 +25,17 @@ export class ApiService {
         });
     }
 
+    getLinesForStops(stopId) {
+        return axios({
+            method: 'get',
+            url: `${BASEPATH}/busStops/${stopId}/busLines`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
+
     getAllBusstops() {
         return axios({
             method: 'get',

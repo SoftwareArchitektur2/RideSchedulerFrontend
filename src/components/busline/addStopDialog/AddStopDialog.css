@@ -1,0 +1,18 @@
+.addStopTitle {
+    padding-bottom: 5px !important;
+}
+
+.editorContent {
+    padding-bottom: 0px !important;
+}
+
+.addStopContainer {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+}
+
+.stopListEntry:hover {
+    cursor: pointer;
+    background-color: lightgray;
+    transition: 0.2s;
+}

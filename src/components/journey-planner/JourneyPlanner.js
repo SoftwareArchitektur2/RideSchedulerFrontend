@@ -1,11 +1,12 @@
 import { TimePicker } from "@mui/lab";
 import { AppBar, Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField, Toolbar, Typography, Card, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Snackbar, Alert } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ApiService } from "../../api/ApiService";
 
 import './JourneyPlanner.css';
 
 export default function JourneyPlanner({isAdmin}) {    
-    const [selectedStop, setSelectedStop] = useState("");
+    const [selectedStop, setSelectedStop] = useState(null);
     const [startingTime, setStartingTime] = useState(null);
     const [isSearched, setIsSearched] = useState(false);
 
@@ -14,15 +15,7 @@ export default function JourneyPlanner({isAdmin}) {
     const selectScheduleTime = ["0:30", "1:00", "1:30", "2:00", "2:30", "3:00", "3:30", "4:00", "4:30", "5:00"];
     const [scheduleTime, setScheduleTime] = useState("");
 
-    const [mockStops, setMockStops] = useState([
-        {name: "Tibusstraße", hasWifi: false},
-        {name: "Altstadt/Bült", hasWifi: true},
-        {name: "Eisenbahnstraße", hasWifi: false},
-        {name: "Hauptbahnhof", hasWifi: true},
-        {name: "Domplatz", hasWifi: true},
-        {name: "Hüfferstiftung", hasWifi: false},
-        {name: "Aegidiimarkt", hasWifi: true}
-    ]);
+    const [busstops, setBusstops] = useState([]);
     const [mockJourneys, setMockJourneys] = useState([
         {id: 0, line: "1", lastStop: "Tibusstraße", departure: "07:10"},
         {id: 1, line: "11", lastStop: "Altstadt/Bült", departure: "08:10"},
@@ -30,11 +23,21 @@ export default function JourneyPlanner({isAdmin}) {
         {id: 3, line: "16", lastStop: "Hauptbahnhof", departure: "10:10"},
         {id: 4, line: "22", lastStop: "Domplatz", departure: "11:10"}
     ]);
+  
+    const apiService = new ApiService();
+    useEffect(() => {
+        const fetchBusstops = async () => {
+            const fetchedBusstops = await apiService.getAllBusstops();
+            setBusstops(fetchedBusstops.data);
+        }
+        fetchBusstops();
+      }, []);
 
     function onSearchJourney() {
-        if (selectedStop == "" || startingTime === null || scheduleTime == "") {
+        if (selectedStop === null || startingTime === null || scheduleTime == "") {
             setIsError(true);
         } else {
+            //TODO how to search? service? or frontend logic?
             setIsSearched(true);
         }
     }
@@ -58,8 +61,8 @@ export default function JourneyPlanner({isAdmin}) {
                             }}
                             sx={{width: '12vw'}}
                         >
-                            { mockStops.map(stop =>
-                                <MenuItem value={stop.name}>{stop.name}</MenuItem>
+                            { busstops.map(stop =>
+                                <MenuItem value={stop}>{stop.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>

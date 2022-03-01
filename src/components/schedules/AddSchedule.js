@@ -31,7 +31,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
             }
             fetchBusstops();
         }
-    }, [lastStopDisabled]);
+    }, [schedule.line]);
 
     function onSaveSchedule() {
         let finalSchedule = {...schedule, startingTime: startingTime.format('HH:mm:ss')};
