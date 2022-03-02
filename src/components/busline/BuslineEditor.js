@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import InputMask from 'react-input-mask';
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import './BuslineEditor.css';
 import { DataGrid } from "@mui/x-data-grid";
 import { ApiService } from "../../api/ApiService";
 
-export default function BuslineEditor({open, name, handleClose, setName, displayedName, setDisplayedName, busstops, id}) {
+export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id}) {
 
     const [allBusstops, setAllBusstops] = useState([]);
     const apiService = new ApiService();
@@ -15,27 +15,34 @@ export default function BuslineEditor({open, name, handleClose, setName, display
         const fetchBusstops = async () => {
             const res = await apiService.getAllBusstops();
             setAllBusstops(res.data);
-            setSelectionModel(res.data.filter(stop => busstops.filter(mappedStop => mappedStop.name == stop.name).length > 0).map(stop => stop.name));
+            // setSelectionModel(res.data.filter(stop => busstops.filter(mappedStop => mappedStop.name == stop.name).length > 0).map(stop => stop.name));
         }
         fetchBusstops();
       }, [busstops]);
 
     function saveBusline() {
+        let savedId;
         if (name) {
             apiService.updateBusline(displayedName, id);
         } else {
-            apiService.saveBusline(displayedName);
+            apiService.saveBusline(displayedName).then(savedLine => {
+                savedId = savedLine.data.id;
+               let sortedStops = allBusstops.filter(stop => stop.nrReihenfolge).sort((a, b) => {return a.nrReihenfolge - b.nrReihenfolge});
+                sortedStops.forEach(stop => {
+                    apiService.saveBusstopForBusline(savedLine.data.id, stop);
+                }); 
+            });
         }
-        setName(displayedName);
+        setNameAndId(displayedName, savedId ? savedId : id);
         handleClose();
     }
 
-    const busstopColumns = [
-        {field: 'name', headerName: 'Haltestelle', flex: 1},
-        {field: 'hasWifi', headerName: 'WLan vorhanden', valueGetter: (params) => params.row.hasWifi ? "Ja" : "Nein", flex: 0.5}
-    ]
+    // const busstopColumns = [
+    //     {field: 'name', headerName: 'Haltestelle', flex: 1},
+    //     {field: 'hasWifi', headerName: 'WLan vorhanden', valueGetter: (params) => params.row.hasWifi ? "Ja" : "Nein", flex: 0.5}
+    // ]
 
-    const [selectionModel, setSelectionModel] = useState([]);
+    // const [selectionModel, setSelectionModel] = useState([]);
 
     return <>
         {busstops &&
@@ -53,20 +60,46 @@ export default function BuslineEditor({open, name, handleClose, setName, display
                                 value={displayedName}
                                 onChange={(e) => setDisplayedName(e.target.value)}
                             />
-                    <div className="busstopTable">
-                        <DataGrid
-                            rows={allBusstops}
-                            columns={busstopColumns}
-                            checkboxSelection   
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                            getRowId={(row) => row.name}
-                            autoHeight={true}
-                            disableExtendRowFullWidth={true}
-                            selectionModel={selectionModel}
-                            onSelectionModelChange={setSelectionModel}
-                        />
-                    </div>
+                    {!name && 
+                        <div className="busstopTable">
+                            {/* <DataGrid
+                                rows={allBusstops}
+                                columns={busstopColumns}
+                                checkboxSelection   
+                                pageSize={5}
+                                rowsPerPageOptions={[5]}
+                                getRowId={(row) => row.name}
+                                autoHeight={true}
+                                disableExtendRowFullWidth={true}
+                                selectionModel={selectionModel}
+                                onSelectionModelChange={setSelectionModel}
+                            /> */}
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Nr. Reihenfolge</TableCell>
+                                        <TableCell>Minuten bis zum nächsten Halt</TableCell>
+                                        <TableCell>Haltestelle</TableCell>
+                                        <TableCell>WLan vorhanden</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {allBusstops.map(stop =>
+                                        <TableRow>
+                                            <TableCell>
+                                                <TextField variant="outlined" placeholder="Nummer" value={stop.nrReihenfolge} size="small" onChange={(event) => {stop.nrReihenfolge = parseInt(event.target.value)}}></TextField>
+                                            </TableCell>
+                                            <TableCell>
+                                                <TextField variant="outlined" placeholder="Dauer" value={stop.timeToNextStop} size="small" onChange={(event) => {stop.timeToNextStop = parseInt(event.target.value)}}></TextField>
+                                            </TableCell>
+                                            <TableCell>{stop.name}</TableCell>
+                                            <TableCell>{stop.hasWifi ? "Ja" : "Nein"}</TableCell>
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    }
                 </DialogContent> 
                 <DialogActions>
                     <Button onClick={handleClose}>Abbrechen</Button>

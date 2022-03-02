@@ -20,8 +20,7 @@ export default function AddStopDialog({open, line, handleClose}) {
     }, [line]);
 
     function addStop(stop) {
-        //TODO Service call save
-        handleClose();
+        apiService.saveBusstopForBusline(line.id, stop).then(res => handleClose());
     }
 
     return <>

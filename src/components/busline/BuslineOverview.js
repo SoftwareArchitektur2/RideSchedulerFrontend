@@ -68,12 +68,12 @@ export default function BuslineOverview({isAdmin}) {
         setScheduleEditorOpen(false);
     }
 
-    function setNameForBusline(buslineName) {
+    function setNameAndIdForBusline(buslineName, id) {
         var editedBusline = allBuslines.filter(busline => selectedBusline == busline.name)[0];
         if (editedBusline) {
             editedBusline.name = buslineName;
         } else {
-            allBuslines.push({id: allBuslines[allBuslines.length - 1].id + 1, name: buslineName});
+            allBuslines.push({id: id, name: buslineName});
         }
         onBusSearch("");
     }
@@ -96,7 +96,7 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setName={setNameForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
+                        <BuslineEditor id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setNameAndId={setNameAndIdForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
                     </div>
                 }
                 <div className='search'>

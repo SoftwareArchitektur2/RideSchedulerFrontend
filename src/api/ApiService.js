@@ -141,4 +141,19 @@ export class ApiService {
             }
         });
     }
+
+    saveBusstopForBusline(lineId, stop) {
+        return axios({
+            method: 'post',
+            url: `${BASEPATH}/busLines/${lineId}/busStops`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            },
+            data: {
+                id: stop.id,
+                timeToNextStop: stop.timeToNextStop
+            }
+        });
+    }
 }
