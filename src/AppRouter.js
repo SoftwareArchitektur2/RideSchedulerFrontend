@@ -9,7 +9,7 @@ import Schedules from './components/schedules/Schedules';
 import JourneyPlanner from './components/journey-planner/JourneyPlanner';
 
 export default function AppRouter() {
-    const [menu, setMenu] = useState([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrplanauskunft", link: "/journeyplanner"}, {text: "Menü4", link: "/"}]);
+    const [menu, setMenu] = useState([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrplanauskunft", link: "/journeyplanner"}]);
     const [isAdmin, setIsAdmin] = useState(false);
 
     return <>

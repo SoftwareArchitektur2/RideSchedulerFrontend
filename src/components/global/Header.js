@@ -13,17 +13,14 @@ export default function Header({menuData}) {
     return <>
     <div style={{'display': 'flex'}}>
         <Grid container spacing={0} className='header'>
-            <Grid item xs={3} className='headerField' onClick={() => navigate(menuData[0].link)}>
+            <Grid item xs={4} className='headerField' onClick={() => navigate(menuData[0].link)}>
                 <Typography variant='h6' className='menutext'>{menuData[0].text}</Typography>
             </Grid>
-            <Grid item xs={3} className='headerField' onClick={() => navigate(menuData[1].link)}>
+            <Grid item xs={4} className='headerField' onClick={() => navigate(menuData[1].link)}>
                 <Typography variant='h6' className='menutext'>{menuData[1].text}</Typography>
             </Grid>
-            <Grid item xs={3} className='headerField' onClick={() => navigate(menuData[2].link)}>
+            <Grid item xs={4} className='headerField' onClick={() => navigate(menuData[2].link)}>
                 <Typography variant='h6' className='menutext'>{menuData[2].text}</Typography>
-            </Grid>
-            <Grid item xs={3} className='headerField' onClick={() => navigate(menuData[3].link)}>
-                <Typography variant='h6' className='menutext'>{menuData[3].text}</Typography>
             </Grid>
         </Grid>
     </div>

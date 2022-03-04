@@ -6,18 +6,24 @@ import './Schedules.css';
 import AddSchedule from './AddSchedule';
 import { ApiService } from '../../api/ApiService';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 
 export default function Schedules({isAdmin}) {
     const [schedules, setSchedules] = useState([]);
     const [addScheduleOpen, setAddScheduleOpen] = useState(false);
+    let history = useHistory();
 
     const apiService = new ApiService();
     useEffect(() => {
-        const fetchSchedules = async () => {
-            const fetchedSchedules = await apiService.getAllSchedules();
-            setSchedules(fetchedSchedules.data);
+        if (isAdmin) {
+            const fetchSchedules = async () => {
+                const fetchedSchedules = await apiService.getAllSchedules();
+                setSchedules(fetchedSchedules.data);
+            }
+            fetchSchedules();
+        } else {
+            history.push("/");
         }
-        fetchSchedules();
       }, []);
 
     function addSchedule() {

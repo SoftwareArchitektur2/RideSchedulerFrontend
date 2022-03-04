@@ -12,10 +12,10 @@ export default function Footer({setMenuFunction, isAdmin, setIsAdminFunction}) {
         history.push("/");
         setIsAdminFunction(!isAdmin);
         if (!isAdmin/*Somehow admin is set after the function*/) {
-            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrpläne", link: "/schedules"}, {text: "Menü4", link: "/"}]);
+            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrpläne", link: "/schedules"}]);
         } else {
 
-            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrplanauskunft", link: "/journeyplanner"}, {text: "Menü4", link: "/"}]);
+            setMenuFunction([{text: "Buslinien", link: "/"}, {text: "Haltestellen", link: "/busstops"}, {text: "Fahrplanauskunft", link: "/journeyplanner"}]);
 
         }
     }
