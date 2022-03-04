@@ -125,7 +125,7 @@ export default function BuslineOverview({isAdmin}) {
                     <TableBody>
                         {
                             displayedBuslines.map((line) => (
-                                <TableRow key={line.name} className='tablerow'>
+                                <TableRow key={line.id} className='tablerow'>
                                     <TableCell onClick={(event) => onSelectBusline(line.name, line.id)}>{line.name}</TableCell>
                                     {isAdmin &&
                                     <>

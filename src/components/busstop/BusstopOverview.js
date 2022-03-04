@@ -58,12 +58,7 @@ export default function BusstopOverview({isAdmin}) {
         if (stop) {
             let existingStop = allBusstops.filter(busstop => busstop.name == stop.name)[0];
             let editedStop;
-            if (stopname) {
-                editedStop = {...existingStop, name: stopname};
-            } 
-            if (hasWifi) {
-                editedStop = {...editedStop, hasWifi: hasWifi};
-            }
+            editedStop = {...existingStop, name: stopname, hasWifi: hasWifi};
             let index = allBusstops.indexOf(existingStop);
             let editedBusstops = [...allBusstops];
             editedBusstops.splice(index, 1, editedStop);

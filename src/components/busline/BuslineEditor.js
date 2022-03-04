@@ -87,7 +87,7 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                                 </TableHead>
                                 <TableBody>
                                     {allBusstops.map(stop =>
-                                        <TableRow>
+                                        <TableRow key={stop.id}>
                                             <TableCell>
                                                 <TextField variant="outlined" placeholder="Nummer" value={stop.nrReihenfolge} size="small" onChange={(event) => {stop.nrReihenfolge = parseInt(event.target.value)}}></TextField>
                                             </TableCell>
