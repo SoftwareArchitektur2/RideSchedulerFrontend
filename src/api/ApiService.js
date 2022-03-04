@@ -135,9 +135,9 @@ export class ApiService {
                 'Access-Control-Allow-Origin': '*'
             },
             data: {
-                busLineId: schedule.line.id,
-                departureTime: schedule.startingTime,
-                destinationStopId: schedule.lastStop.id
+                busLineId: schedule.busLine.id,
+                departureTime: schedule.departureTime,
+                destinationStopId: schedule.destinationStop.id
             }
         });
     }
@@ -153,6 +153,17 @@ export class ApiService {
             data: {
                 id: stop.id,
                 timeToNextStop: stop.timeToNextStop
+            }
+        });
+    }
+
+    getAllSchedules() {
+        return axios({
+            method: 'get',
+            url: BASEPATH + '/schedules/',
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
             }
         });
     }

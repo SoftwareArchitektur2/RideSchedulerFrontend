@@ -7,7 +7,7 @@ import { ApiService } from "../../api/ApiService";
 import './AddSchedule.css';
 
 export default function AddSchedule({open, handleClose, saveSchedule}) {
-    const [schedule, setSchedule] = useState({line: null, startingTime: null, lastStop: {name: null, id: null}});    
+    const [schedule, setSchedule] = useState({busLine: null, departureTime: null, destinationStop: {name: null, id: null}});    
     const [startingTime, setStartingTime] = useState(null);
     const [lastStopDisabled, setLastStopDisabled] = useState(true);
     const [busstops, setBusstops] = useState([]);
@@ -24,32 +24,33 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     }, []);
 
     useEffect(() => {
-        if (schedule.line) {
+        if (schedule.busLine) {
             const fetchBusstops = async () => {
-                const fetchedBusstops= await apiService.getDestinationsStopsForLine(schedule.line.id);
+                const fetchedBusstops= await apiService.getDestinationsStopsForLine(schedule.busLine.id);
                 setBusstops(fetchedBusstops.data);
             }
             fetchBusstops();
         }
-    }, [schedule.line]);
+    }, [schedule.busLine]);
 
     function onSaveSchedule() {
-        let finalSchedule = {...schedule, startingTime: startingTime.format('HH:mm:ss')};
+        let finalSchedule = {...schedule, departureTime: startingTime.format('HH:mm:ss')};
         apiService.saveSchedule(finalSchedule).then(res => {
+            finalSchedule.departureTime = startingTime.format("HH:mm");
             saveSchedule(finalSchedule);
             onHandleClose(); 
         });
     }
 
     function onHandleClose() {
-        setSchedule({line: null, startingTime: null, lastStop: {name: null, id: null}});
+        setSchedule({busLine: null, departureTime: null, destinationStop: {name: null, id: null}});
         setStartingTime(null);
         setLastStopDisabled(true);
         handleClose();
     }
 
     function onLineChange(line) {
-        setSchedule({...schedule, line: line});
+        setSchedule({...schedule, busLine: line});
         setLastStopDisabled(false)
     }
 
@@ -89,7 +90,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                             value={schedule.lastStop}
                             label="Endhaltestelle"
                             labelId="stopLabel"
-                            onChange={(event) => setSchedule({...schedule, lastStop: event.target.value})}
+                            onChange={(event) => setSchedule({...schedule, destinationStop: event.target.value})}
                             disabled={lastStopDisabled}
                         >
                             { busstops.map(stop =>

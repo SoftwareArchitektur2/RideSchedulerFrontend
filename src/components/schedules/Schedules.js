@@ -1,18 +1,24 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import './Schedules.css';
 import AddSchedule from './AddSchedule';
+import { ApiService } from '../../api/ApiService';
+import moment from 'moment';
 
 export default function Schedules({isAdmin}) {
-    const [schedules, setSchedules] = useState([
-        {id: 0, line: {id: 0, name: 1}, startingTime: "8:01", lastStop: {name: "Tibusstraße"}},
-        {id: 1, line: {id: 1, name: 11}, startingTime: "11:01", lastStop: {name: "Altstadt/Bült"}},
-        {id: 2, line: {id: 2, name: 15}, startingTime: "12:01", lastStop: {name: "Domplatz"}},
-        {id: 3, line: {id: 3, name: 16}, startingTime: "13:01", lastStop: {name: "Münster Hbf"}}
-    ]);
+    const [schedules, setSchedules] = useState([]);
     const [addScheduleOpen, setAddScheduleOpen] = useState(false);
+
+    const apiService = new ApiService();
+    useEffect(() => {
+        const fetchSchedules = async () => {
+            const fetchedSchedules = await apiService.getAllSchedules();
+            setSchedules(fetchedSchedules.data);
+        }
+        fetchSchedules();
+      }, []);
 
     function addSchedule() {
         setAddScheduleOpen(true);
@@ -40,7 +46,7 @@ export default function Schedules({isAdmin}) {
                 }
             </Toolbar>
         </Box>
-        <Box>
+        <Box sx={{marginBottom: '5vh'}}>
             <TableContainer component={Paper} sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto'}}>
                 <Table aria-label="Verfügbare Fahrpläne">
                     <TableHead>
@@ -54,9 +60,9 @@ export default function Schedules({isAdmin}) {
                         {
                             schedules.map((schedule) => (
                                 <TableRow key={schedule.id} className='tablerowSchedules'>
-                                    <TableCell>{schedule.line.name}</TableCell>
-                                    <TableCell>{schedule.startingTime}</TableCell>
-                                    <TableCell>{schedule.lastStop.name}</TableCell>
+                                    <TableCell>{schedule.busLine.name}</TableCell>
+                                    <TableCell>{moment(schedule.departureTime, "HH:mm:ss").format("HH:mm")}</TableCell>
+                                    <TableCell>{schedule.destinationStop.name}</TableCell>
                                 </TableRow>
                             ))
                         }
