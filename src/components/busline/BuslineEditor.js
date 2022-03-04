@@ -6,7 +6,7 @@ import './BuslineEditor.css';
 import { DataGrid } from "@mui/x-data-grid";
 import { ApiService } from "../../api/ApiService";
 
-export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id}) {
+export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id, isAdmin}) {
 
     const [allBusstops, setAllBusstops] = useState([]);
     const apiService = new ApiService();
@@ -17,7 +17,9 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
             setAllBusstops(res.data);
             // setSelectionModel(res.data.filter(stop => busstops.filter(mappedStop => mappedStop.name == stop.name).length > 0).map(stop => stop.name));
         }
-        fetchBusstops();
+        if (isAdmin) {
+            fetchBusstops();
+        }
       }, [busstops]);
 
     function saveBusline() {

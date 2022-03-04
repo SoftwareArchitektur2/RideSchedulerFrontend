@@ -96,7 +96,7 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setNameAndId={setNameAndIdForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
+                        <BuslineEditor isAdmin={isAdmin} id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setNameAndId={setNameAndIdForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
                     </div>
                 }
                 <div className='search'>
@@ -141,7 +141,7 @@ export default function BuslineOverview({isAdmin}) {
                 </Table>
             </TableContainer>
         </Box>
-        <AddStopDialog open={scheduleEditorOpen} line={selectedBusline} handleClose={() => closeDialogs()}></AddStopDialog>
-        <BuslineDetail open={detailOpen} busline={selectedBusline} busstops={busStops} handleClose={() => closeDialogs()}></BuslineDetail>
+        <AddStopDialog open={scheduleEditorOpen} line={selectedBusline} handleClose={() => closeDialogs()} isAdmin={isAdmin}></AddStopDialog>
+        <BuslineDetail open={detailOpen} busline={selectedBusline} busstops={busStops} handleClose={() => closeDialogs()} isAdmin={isAdmin}></BuslineDetail>
     </>;
 }

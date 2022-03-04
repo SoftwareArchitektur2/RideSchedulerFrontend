@@ -93,7 +93,7 @@ export default function BusstopOverview({isAdmin}) {
                         <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop}  originalStop={originalStop} setDisplayedBusstop={(stop) => setSelectedBusstop(stop)} setBusstop={(stop, stopname, hasWifi) => setEditedBusstop(stop, stopname, hasWifi)} />
                     </div>
                 }
-                <BusstopDetail open={detailOpen} handleClose={()=> closeDialogs()} busstop={selectedBusstop} />
+                <BusstopDetail open={detailOpen} handleClose={()=> closeDialogs()} busstop={selectedBusstop} isAdmin={isAdmin}/>
 
                 <div className='search'>
                     <div className='searchIconWrapper'>

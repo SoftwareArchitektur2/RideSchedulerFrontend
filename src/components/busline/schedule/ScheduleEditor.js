@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import './ScheduleEditor.css';
 
-export default function ScheduleEditor({open, name, handleClose, stops}) {
+export default function ScheduleEditor({open, name, handleClose, stops, isAdmin}) {
     const [mockStops, setMockStops] = useState([
         {name: "Tibusstraße", timeToNextStop: 5, nrReihenfolge: 1},
         {name: "Altstadt/Bült", timeToNextStop: 5, nrReihenfolge: 2},

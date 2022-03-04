@@ -6,7 +6,7 @@ import moment from 'moment'
 import './BusstopDetail.css';
 import { ApiService } from "../../api/ApiService";
 
-export default function BusstopDetail({open, handleClose,  busstop}) {
+export default function BusstopDetail({open, handleClose,  busstop,  isAdmin}) {
     const [detailOpen, setDetailOpen] = useState(false);
     const [selectedBusline, setSelectedBusline] = useState(undefined);
     const apiService = new ApiService();
@@ -20,7 +20,9 @@ export default function BusstopDetail({open, handleClose,  busstop}) {
             setAllBuslines(res.data);
             setDisplayedBuslines(res.data);
         }
-        fetchBusstops();
+        if (!isAdmin) {
+            fetchBusstops();
+        }
       }, [busstop]);
 
       useEffect(() => {
@@ -30,7 +32,9 @@ export default function BusstopDetail({open, handleClose,  busstop}) {
             setAllSchedules(res.data.map(schedule=>getdepartureTimeFromSchedule(schedule)));
             
         }
-        fetchTimes();
+        if (!isAdmin) {
+            fetchTimes();
+        }
       }, [selectedBusline]);
  function getdepartureTimeFromSchedule(schedule){
      if(schedule.departureTime.length>10){

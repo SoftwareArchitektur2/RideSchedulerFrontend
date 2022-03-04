@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ApiService } from "../../../api/ApiService";
 import './AddStopDialog.css';
 
-export default function AddStopDialog({open, line, handleClose}) {
+export default function AddStopDialog({open, line, handleClose, isAdmin}) {
     const [allBusstops, setAllBusstops] = useState([]);
     
     const apiService = new ApiService();
@@ -16,7 +16,9 @@ export default function AddStopDialog({open, line, handleClose}) {
                 })
             })
         }
-        fetchBusstops();
+        if (isAdmin) {
+            fetchBusstops();
+        }
     }, [line]);
 
     function addStop(stop) {
