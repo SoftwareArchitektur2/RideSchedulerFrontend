@@ -167,4 +167,15 @@ export class ApiService {
             }
         });
     }
+
+    deleteBusline(id) {
+        return axios({
+            method: 'delete',
+            url: `${BASEPATH}/busLines/${id}`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
 }
