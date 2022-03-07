@@ -44,10 +44,10 @@ export default function JourneyPlanner({isAdmin}) {
 
     return <>
         <Box>
-            <Typography variant='h4' sx={{'marginLeft': '25%'}}>Fahrplanauskunft</Typography>
+            <Typography variant='h4' sx={{'marginLeft': '20%'}}>Fahrplanauskunft</Typography>
         </Box>
         <Box>
-            <Card sx={{width: '50vw', 'marginLeft': 'auto', 'marginRight': 'auto', marginTop: '20px'}}>
+            <Card sx={{width: '60vw', 'marginLeft': 'auto', 'marginRight': 'auto', marginTop: '20px'}}>
                <Toolbar sx={{margin: '20px', 'width': '90%', display: 'flex', justifyContent: 'space-between'}}>
                     <FormControl>
                         <InputLabel id="journeyStopLabel">Starthaltestelle</InputLabel>
