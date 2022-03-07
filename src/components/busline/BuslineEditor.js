@@ -6,7 +6,7 @@ import './BuslineEditor.css';
 import { DataGrid } from "@mui/x-data-grid";
 import { ApiService } from "../../api/ApiService";
 
-export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id, isAdmin}) {
+export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id, isAdmin, removeLine}) {
 
     const [allBusstops, setAllBusstops] = useState([]);
 
@@ -40,7 +40,7 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
         let savedId;
         if (name) {
             apiService.updateBusline(displayedName, id).then(res => {
-                setNameAndId(displayedName, savedId ? savedId : id);
+                setNameAndId(displayedName, id);
                 handleClose();
             }).catch(error => {
                 setIsError(true);
@@ -63,6 +63,23 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                 handleClose(); 
             });
         }
+    }
+
+    function deleteBusline() {
+        apiService.getStopsForLine(id).then(res => {
+            if (res.data.length > 0) {
+                setIsError(true);
+                setErrorMsg("Buslinie enthält Haltestellen und kann nicht gelöscht werden!");
+                return;
+            }
+            apiService.deleteBusline(id).then(res => {
+                removeLine(id);
+                handleClose();
+            }).catch(error => {
+                setIsError(true);
+                setErrorMsg(error.response.data);
+            })
+        })
     }
 
     // const busstopColumns = [
@@ -127,6 +144,9 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                                 </TableBody>
                             </Table>
                         </div>
+                    }
+                    {name &&
+                        <Button variant="contained" className="scheduleButton" style={{display: 'block', marginRight: 'auto', marginLeft: 'auto', marginTop: '10px'}} onClick={() => deleteBusline()}>Löschen</Button>
                     }
                 </DialogContent> 
                 <DialogActions>

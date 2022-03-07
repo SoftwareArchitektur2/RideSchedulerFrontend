@@ -82,6 +82,12 @@ export default function BuslineOverview({isAdmin}) {
         setScheduleEditorOpen(true);
     }
 
+    function removeLine(id) {
+        let newList = allBuslines.filter(line => line.id !== id);
+        setAllBuslines(newList);
+        setDisplayedBuslines(newList);
+    }
+
     return <>
         <Box>
             <Typography variant='h4' sx={{'marginLeft': '25%'}}>Übersicht über die Buslinien</Typography>
@@ -93,7 +99,7 @@ export default function BuslineOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusline()}>
                             Hinzufügen
                         </Button>
-                        <BuslineEditor isAdmin={isAdmin} id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setNameAndId={setNameAndIdForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName}/> 
+                        <BuslineEditor isAdmin={isAdmin} id={selectedId} open={editorOpen} name={selectedBusline} handleClose={() => closeDialogs()} setNameAndId={setNameAndIdForBusline} busstops={busStops} displayedName={displayedName} setDisplayedName={setDisplayedName} removeLine={removeLine}/> 
                     </div>
                 }
                 <div className='search'>
