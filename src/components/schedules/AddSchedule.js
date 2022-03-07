@@ -1,5 +1,5 @@
 import { TimePicker } from "@mui/lab";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormGroup, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormGroup, InputLabel, MenuItem, Select, Snackbar, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import InputMask from 'react-input-mask';
 import { ApiService } from "../../api/ApiService";
@@ -12,6 +12,9 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     const [lastStopDisabled, setLastStopDisabled] = useState(true);
     const [busstops, setBusstops] = useState([]);
     const [buslines, setBuslines] = useState([]);
+
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
     const apiService = new ApiService();
 
@@ -34,11 +37,19 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     }, [schedule.busLine]);
 
     function onSaveSchedule() {
+        if (!schedule.busLine || !startingTime || !schedule.destinationStop || !schedule.destinationStop.id) {
+            setIsError(true);
+            setErrorMsg("Es müssen alle Felder gefüllt werden!");
+        }
+
         let finalSchedule = {...schedule, departureTime: startingTime.format('HH:mm:ss')};
         apiService.saveSchedule(finalSchedule).then(res => {
             finalSchedule.departureTime = startingTime.format("HH:mm");
             saveSchedule(finalSchedule);
             onHandleClose(); 
+        }).catch(error => {
+            setIsError(true);
+            setErrorMsg(error.response.data);
         });
     }
 
@@ -104,5 +115,8 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                     <Button onClick={() => onSaveSchedule()}>Speichern</Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={isError} autoHideDuration={3000} onClose={() => setIsError(false)}>
+                <Alert severity="error">{errorMsg}</Alert>
+            </Snackbar>
     </>;
 }

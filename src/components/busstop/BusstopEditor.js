@@ -15,7 +15,7 @@ export default function BusstopEditor({open, handleClose, originalStop, busstop,
             setErrorMsg("Bitte einen Namen vergeben.");
             setErrorOpen(true);
             return;
-        }
+        } 
         serviceCallSaveStop().then(res => {
             setBusstop(originalStop, busstop.name, busstop.hasWifi);
             handleClose();

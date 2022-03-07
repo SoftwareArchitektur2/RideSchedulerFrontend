@@ -31,6 +31,10 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
             setIsError(true);
             setErrorMsg("Felder dürfen nicht leer sein")
             return;
+        } else if (name && allBusstops.filter(stop => stop.nrReihenfolge).length === 0) {
+            setIsError(true);
+            setErrorMsg("Mindestens eine Haltestelle muss ausgewählt sein");
+            return;
         }
         
         let savedId;
@@ -40,7 +44,7 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                 handleClose();
             }).catch(error => {
                 setIsError(true);
-                setErrorMsg("Konnte die Buslinie nicht speichern, technischer Fehler!");
+                setErrorMsg(error.response.data);
             });
         } else {
             apiService.saveBusline(displayedName).then(savedLine => {
@@ -49,11 +53,11 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                 sortedStops.forEach(stop => {
                     apiService.saveBusstopForBusline(savedLine.data.id, stop).catch(error => {
                         setIsError(true);
-                        setErrorMsg("Konnte die ausgewählten Bushaltestellen nicht speichern, technischer Fehler!");
+                        setErrorMsg(error.response.data);
                     });
                 }).catch(error => {
                     setIsError(true);
-                    setErrorMsg("Konnte die Buslinie nicht speichern, technischer Fehler!");
+                    setErrorMsg(error.response.data);
                 });
                 setNameAndId(displayedName, savedId ? savedId : id);
                 handleClose(); 
