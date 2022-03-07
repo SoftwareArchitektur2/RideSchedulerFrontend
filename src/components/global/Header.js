@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Avatar, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import './Header.css';
@@ -24,5 +24,6 @@ export default function Header({menuData}) {
             </Grid>
         </Grid>
     </div>
+    <img alt='Logo' src='bus.png' style={{width: '128px', marginLeft: '40px', marginTop: '40px', marginBottom: '-64px'}}></img>
     </>;
 }
