@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
 import InputMask from 'react-input-mask';
 import React, { useEffect } from "react";
 import { useState } from "react";
@@ -9,6 +9,10 @@ import { ApiService } from "../../api/ApiService";
 export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id, isAdmin}) {
 
     const [allBusstops, setAllBusstops] = useState([]);
+
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
     const apiService = new ApiService();
 
     useEffect(() => {
@@ -23,20 +27,38 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
       }, [busstops]);
 
     function saveBusline() {
+        if (!displayedName || displayedName == "") {
+            setIsError(true);
+            setErrorMsg("Felder dürfen nicht leer sein")
+            return;
+        }
+        
         let savedId;
         if (name) {
-            apiService.updateBusline(displayedName, id);
+            apiService.updateBusline(displayedName, id).then(res => {
+                setNameAndId(displayedName, savedId ? savedId : id);
+                handleClose();
+            }).catch(error => {
+                setIsError(true);
+                setErrorMsg("Konnte die Buslinie nicht speichern, technischer Fehler!");
+            });
         } else {
             apiService.saveBusline(displayedName).then(savedLine => {
                 savedId = savedLine.data.id;
                let sortedStops = allBusstops.filter(stop => stop.nrReihenfolge).sort((a, b) => {return a.nrReihenfolge - b.nrReihenfolge});
                 sortedStops.forEach(stop => {
-                    apiService.saveBusstopForBusline(savedLine.data.id, stop);
-                }); 
+                    apiService.saveBusstopForBusline(savedLine.data.id, stop).catch(error => {
+                        setIsError(true);
+                        setErrorMsg("Konnte die ausgewählten Bushaltestellen nicht speichern, technischer Fehler!");
+                    });
+                }).catch(error => {
+                    setIsError(true);
+                    setErrorMsg("Konnte die Buslinie nicht speichern, technischer Fehler!");
+                });
+                setNameAndId(displayedName, savedId ? savedId : id);
+                handleClose(); 
             });
         }
-        setNameAndId(displayedName, savedId ? savedId : id);
-        handleClose();
     }
 
     // const busstopColumns = [
@@ -109,5 +131,8 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                 </DialogActions>
             </Dialog>
         }
+        <Snackbar open={isError} onClose={() => setIsError(false)} autoHideDuration={3000}>
+            <Alert severity="error">{errorMsg}</Alert>    
+        </Snackbar>
     </>;
 }
