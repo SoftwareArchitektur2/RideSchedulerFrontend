@@ -1,3 +1,5 @@
+[![Node.js CI](https://github.com/SoftwareArchitektur2/RideSchedulerFrontend/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/SoftwareArchitektur2/RideSchedulerFrontend/actions/workflows/node.js.yml)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
