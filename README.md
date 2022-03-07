@@ -1,3 +1,4 @@
+# Ride Scheduler
 [![Node.js CI](https://github.com/SoftwareArchitektur2/RideSchedulerFrontend/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/SoftwareArchitektur2/RideSchedulerFrontend/actions/workflows/node.js.yml)
 
 # Getting Started with Create React App
