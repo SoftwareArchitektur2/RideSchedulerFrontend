@@ -21,7 +21,7 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
             setAllBusstops(res.data);
             // setSelectionModel(res.data.filter(stop => busstops.filter(mappedStop => mappedStop.name == stop.name).length > 0).map(stop => stop.name));
         }
-        if (isAdmin) {
+        if (isAdmin && !name) {
             fetchBusstops();
         }
       }, [busstops]);

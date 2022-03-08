@@ -38,9 +38,11 @@ export default function BuslineOverview({isAdmin}) {
     }
 
     function onSelectBusline(busline, buslineId) {
-        apiService.getStopsForLine(buslineId).then((busstops) => {
-            setBusStops(busstops.data);
-        });
+        if (!isAdmin) {
+            apiService.getStopsForLine(buslineId).then((busstops) => {
+                setBusStops(busstops.data);
+            });
+        }
         setSelectedBusline(busline);
         setDisplayedName(busline + "");
         setSelectedId(buslineId);
@@ -60,9 +62,9 @@ export default function BuslineOverview({isAdmin}) {
     function closeDialogs() {
         setEditorOpen(false);
         setDetailOpen(false);
-        setSelectedBusline(undefined);
         setBusStops([]);
         setScheduleEditorOpen(false);
+        setSelectedBusline(undefined);
     }
 
     function setNameAndIdForBusline(buslineName, id) {

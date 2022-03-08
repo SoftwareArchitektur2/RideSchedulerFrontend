@@ -16,17 +16,17 @@ export default function AddStopDialog({open, line, handleClose, isAdmin}) {
                 })
             })
         }
-        if (isAdmin) {
+        if (isAdmin && open) {
             fetchBusstops();
         }
-    }, [line]);
+    }, [open]);
 
     function addStop(stop) {
         apiService.saveBusstopForBusline(line.id, stop).then(res => handleClose());
     }
 
     return <>
-        {line &&
+        {line && open &&
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle className="addStopTitle">Bushaltestelle hinzufügen</DialogTitle>
                 <DialogContent className="editorContent">
