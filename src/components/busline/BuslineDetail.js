@@ -4,7 +4,6 @@ import { useState } from "react";
 import './BuslineDetail.css';
 
 export default function BuslineDetail({open, busline, handleClose, busstops}) {
-    let key = 0;
     
     return <>
         {busline &&
@@ -18,8 +17,8 @@ export default function BuslineDetail({open, busline, handleClose, busstops}) {
                         <ul className="busstops">
                             {busstops.map(stop => 
                                 <>
-                                <li>{stop.name}</li>
-                                <li>{`${stop.timeToNextStop} min`}</li>
+                                <li key={stop.busStopInBusLineId}>{stop.name}</li>
+                                <li key={stop.busStopInBusLineId + "ttns"}>{`${stop.timeToNextStop} min`}</li>
                                 </>   
                             )}
                         </ul>

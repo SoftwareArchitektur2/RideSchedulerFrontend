@@ -67,7 +67,7 @@ export default function AddStopDialog({open, line, handleClose, isAdmin, isDelet
                             </TableHead>
                             <TableBody>
                                 {allBusstops.map(stop =>
-                                    <TableRow key={stop.id}>
+                                    <TableRow key={stop.busStopInBusLineId ? stop.busStopInBusLineId : stop.id}>
                                         <TableCell onClick={() => addStop(stop)} className="stopListEntry">{stop.name}</TableCell>
                                     </TableRow>    
                                 )}
