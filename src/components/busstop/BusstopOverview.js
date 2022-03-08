@@ -53,6 +53,11 @@ export default function BusstopOverview({isAdmin}) {
         setSelectedBusstop(undefined);
         setOriginalStop(undefined);
     }
+    function removeBusStop(id) {
+        let newList = allBusstops.filter(line => line.id !== id);
+        setAllBusstops(newList);
+        setDisplayedBusstops(newList);
+    }
 
     function setEditedBusstop(stop, stopname, hasWifi) {
         if (stop) {
@@ -85,7 +90,7 @@ export default function BusstopOverview({isAdmin}) {
                         <Button variant='contained' startIcon={<AddIcon />} className='tablebutton' onClick={() => addBusstop()}>
                             Hinzufügen
                         </Button>
-                        <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop}  originalStop={originalStop} setDisplayedBusstop={(stop) => setSelectedBusstop(stop)} setBusstop={(stop, stopname, hasWifi) => setEditedBusstop(stop, stopname, hasWifi)} />
+                        <BusstopEditor open={editorOpen} handleClose={() => closeDialogs()} busstop={selectedBusstop}  originalStop={originalStop} setDisplayedBusstop={(stop) => setSelectedBusstop(stop)} setBusstop={(stop, stopname, hasWifi) => setEditedBusstop(stop, stopname, hasWifi)} removeBusStop={removeBusStop}  />
                     </div>
                 }
                 <BusstopDetail open={detailOpen} handleClose={()=> closeDialogs()} busstop={selectedBusstop} isAdmin={isAdmin}/>

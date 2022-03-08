@@ -4,16 +4,16 @@ import { ApiService } from "../../api/ApiService";
 
 import './BusstopEditor.css';
 
-export default function BusstopEditor({open, handleClose, originalStop, busstop, setBusstop, setDisplayedBusstop}) {
+export default function BusstopEditor({open, handleClose, originalStop, busstop, setBusstop, setDisplayedBusstop,removeBusStop}) {
 
-    const [errorOpen, setErrorOpen] = useState(false);
+    const [errorOpen, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const apiService = new ApiService();
 
     function saveBusstop() {
         if (!busstop.name || busstop.name == "") {
             setErrorMsg("Bitte einen Namen vergeben.");
-            setErrorOpen(true);
+            setIsError(true);
             return;
         } 
         serviceCallSaveStop().then(res => {
@@ -22,10 +22,21 @@ export default function BusstopEditor({open, handleClose, originalStop, busstop,
         }).catch((error) => {
             if (error.response && error.response.status === 400) {
                 setErrorMsg(error.response.data);
-                setErrorOpen(true);
+                setIsError(true);
             }
         }); 
     }
+    function deleteBusStop() {
+           
+        apiService.deleteSchedule(busstop.id).then(res => {
+            removeBusStop(busstop.id);
+            handleClose();
+        }).catch(error => {
+            setIsError(true);
+            setErrorMsg(error.response.data);
+        
+        })
+    } 
 
     function serviceCallSaveStop() {
         if (originalStop) {
@@ -55,13 +66,15 @@ export default function BusstopEditor({open, handleClose, originalStop, busstop,
                     <FormGroup>
                         <FormControlLabel control={<Checkbox checked={busstop.hasWifi} onChange={(event) => setDisplayedBusstop({...busstop, hasWifi: event.target.checked})}/>} label="WLan vorhanden" />
                     </FormGroup>
+                    <Button variant="contained" className="scheduleButton" style={{display: 'block', marginRight: 'auto', marginLeft: 'auto', marginTop: '10px'}} onClick={() => deleteBusStop()}>Löschen</Button>
+                    
                 </DialogContent> 
                 <DialogActions>
                     <Button onClick={handleClose}>Abbrechen</Button>
                     <Button onClick={() => saveBusstop()}>Speichern</Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={errorOpen} autoHideDuration={3000} onClose={() => setErrorOpen(false)}>
+            <Snackbar open={errorOpen} onClose={() => setIsError(false)} autoHideDuration={3000}>
                 <Alert severity="error">{errorMsg}</Alert>
             </Snackbar>
         </>
