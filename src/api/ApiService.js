@@ -178,4 +178,14 @@ export class ApiService {
             }
         });
     }
+    deleteSchedule(id){
+        return axios({
+            method: 'delete',
+            url: `${BASEPATH}/schedules/${id}`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
 }

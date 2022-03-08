@@ -7,10 +7,15 @@ import AddSchedule from './AddSchedule';
 import { ApiService } from '../../api/ApiService';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
+import SchedulesEditor from './SchedulesEditor';
 
 export default function Schedules({isAdmin}) {
-    const [schedules, setSchedules] = useState([]);
+    const [schedule, setSchedule] = useState([]);
     const [addScheduleOpen, setAddScheduleOpen] = useState(false);
+    const [editorOpen, setEditorOpen] = useState(false);
+    const [selectedSchedule, setSelectedSchedule] = useState(undefined);
+    const [allSchedules, setAllSchedules] = useState([]);
+
     let history = useHistory();
 
     const apiService = new ApiService();
@@ -18,24 +23,44 @@ export default function Schedules({isAdmin}) {
         if (isAdmin) {
             const fetchSchedules = async () => {
                 const fetchedSchedules = await apiService.getAllSchedules();
-                setSchedules(fetchedSchedules.data);
+                setAllSchedules(fetchedSchedules.data);
             }
             fetchSchedules();
         } else {
             history.push("/");
         }
       }, []);
-
+      const [displayedSchedules, setDisplayedSchedules] = useState(allSchedules);
     function addSchedule() {
         setAddScheduleOpen(true);
     }
 
-    function displayAddedSchedule(schedule) {
-        let newList = [...schedules];
-        newList.push(schedule);
-        setSchedules(newList);
+    function onSelectSchedules(schedules){
+        setSelectedSchedule({...schedules});
+       
+        if(isAdmin){
+            setEditorOpen(true);
+        }
     }
+    function closeDialogs() {
+        setEditorOpen(false);
+      
+        setSelectedSchedule(undefined);
+      
+    }
+  
 
+    function removeSchedule(id) {
+        let newList = allSchedules.filter(schedule => schedule.id !== id);
+        setAllSchedules(newList);
+        setDisplayedSchedules(newList);
+    }
+    function displayAddedSchedule(schedule) {
+        let newList = [...allSchedules];
+        newList.push(schedule);
+        setAllSchedules(newList);
+
+    }
     return <>
         <Box>
             <Typography variant='h4' sx={{'marginLeft': '25%'}}>Fahrpläne</Typography>
@@ -50,6 +75,8 @@ export default function Schedules({isAdmin}) {
                         <AddSchedule open={addScheduleOpen} handleClose={() => setAddScheduleOpen(false)} saveSchedule={(schedule) => displayAddedSchedule(schedule)}></AddSchedule>
                     </div>
                 }
+                 <SchedulesEditor open={editorOpen} handleClose={()=> closeDialogs()} schedule={selectedSchedule}  removeSchedule={removeSchedule} />
+
             </Toolbar>
         </Box>
         <Box sx={{marginBottom: '5vh'}}>
@@ -64,8 +91,8 @@ export default function Schedules({isAdmin}) {
                     </TableHead>
                     <TableBody>
                         {
-                            schedules.map((schedule) => (
-                                <TableRow key={schedule.id} className='tablerowSchedules'>
+                            allSchedules.map((schedule) => (
+                                <TableRow key={schedule.id} className='tablerow' onClick={(event) => onSelectSchedules(schedule)}>
                                     <TableCell>{schedule.busLine.name}</TableCell>
                                     <TableCell>{moment(schedule.departureTime, "HH:mm:ss").format("HH:mm")}</TableCell>
                                     <TableCell>{schedule.destinationStop.name}</TableCell>
