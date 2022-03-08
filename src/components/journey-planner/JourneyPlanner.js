@@ -2,6 +2,7 @@ import { TimePicker } from "@mui/lab";
 import { AppBar, Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField, Toolbar, Typography, Card, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Snackbar, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ApiService } from "../../api/ApiService";
+import moment from "moment";
 
 import './JourneyPlanner.css';
 
@@ -37,8 +38,9 @@ export default function JourneyPlanner({isAdmin}) {
         if (selectedStop === null || startingTime === null || scheduleTime == "") {
             setIsError(true);
         } else {
-            //TODO how to search? service? or frontend logic?
-            setIsSearched(true);
+            apiService.getJourneyPlan(selectedStop.id, startingTime.toISOString(), moment.duration(scheduleTime, "HH:mm").as('minutes').toString()).then(res => { 
+                setIsSearched(true);
+            });
         }
     }
 

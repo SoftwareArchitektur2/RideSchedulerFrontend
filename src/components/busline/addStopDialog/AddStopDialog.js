@@ -1,11 +1,13 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { ApiService } from "../../../api/ApiService";
 import './AddStopDialog.css';
 
-export default function AddStopDialog({open, line, handleClose, isAdmin}) {
+export default function AddStopDialog({open, line, handleClose, isAdmin, isDelete}) {
     const [allBusstops, setAllBusstops] = useState([]);
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     
     const apiService = new ApiService();
     useEffect(() => {
@@ -16,22 +18,45 @@ export default function AddStopDialog({open, line, handleClose, isAdmin}) {
                 })
             })
         }
-        if (isAdmin && open) {
+        if (isAdmin && open && !isDelete) {
+            fetchBusstops();
+        }
+    }, [open]);
+
+    
+    useEffect(() => {
+        const fetchBusstops = async () => {
+                apiService.getStopsForLine(line.id).then(busstops => {
+                    setAllBusstops(busstops.data);
+                })
+        }
+        if (isAdmin && open && isDelete) {
             fetchBusstops();
         }
     }, [open]);
 
     function addStop(stop) {
-        apiService.saveBusstopForBusline(line.id, stop).then(res => handleClose());
+        if (isDelete) {
+            apiService.removeBusstopForBusline(line.id, stop.id).then(res => handleClose()).catch(error => {
+                setErrorMsg(error.response.data);
+                setIsError(true);
+            });
+        } else {
+            apiService.saveBusstopForBusline(line.id, stop).then(res => handleClose()).catch(error => {
+                setErrorMsg(error.response.data);
+                setIsError(true);
+            });
+        }
     }
 
     return <>
         {line && open &&
+        <>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle className="addStopTitle">Bushaltestelle hinzufügen</DialogTitle>
+                <DialogTitle className="addStopTitle">{isDelete ? 'Bushaltestelle entfernen' : 'Bushaltestelle hinzufügen'}</DialogTitle>
                 <DialogContent className="editorContent">
                     <DialogContentText>
-                        {`Haltestelle für Buslinie ${line.name} hinzufügen`}
+                        {isDelete ? `Haltestelle für Buslinie ${line.name} entfernen` : `Haltestelle für Buslinie ${line.name} hinzufügen`}
                     </DialogContentText>
                     <TableContainer className="addStopContainer">
                         <Table>
@@ -54,6 +79,10 @@ export default function AddStopDialog({open, line, handleClose, isAdmin}) {
                     <Button onClick={handleClose}>Abbrechen</Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={isError} onClose={() => setIsError(false)} autoHideDuration={3000}>
+                <Alert severity="error">{errorMsg}</Alert>    
+            </Snackbar>
+        </>
         }
     </>;
 }

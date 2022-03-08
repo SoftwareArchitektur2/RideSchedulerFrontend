@@ -146,7 +146,7 @@ export default function BuslineOverview({isAdmin}) {
                 </Table>
             </TableContainer>
         </Box>
-        <AddStopDialog open={scheduleEditorOpen} line={selectedBusline} handleClose={() => closeDialogs()} isAdmin={isAdmin}></AddStopDialog>
+        <AddStopDialog open={scheduleEditorOpen} line={selectedBusline} handleClose={() => closeDialogs()} isAdmin={isAdmin} isDelete={false}></AddStopDialog>
         <BuslineDetail open={detailOpen} busline={selectedBusline} busstops={busStops} handleClose={() => closeDialogs()} isAdmin={isAdmin}></BuslineDetail>
     </>;
 }

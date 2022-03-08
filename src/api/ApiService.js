@@ -178,4 +178,41 @@ export class ApiService {
             }
         });
     }
+
+    getJourneyPlan(stopId, startingTime, duration) {
+        return axios({
+            method: 'get',
+            url: `${BASEPATH}/busStops/${stopId}/schedules`,
+            params: {
+                startingTime: startingTime,
+                duration: duration
+            },
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
+
+    removeBusstopForBusline(lineId, stopId) {
+        return axios({
+            method: 'delete',
+            url: `${BASEPATH}/busLines/${lineId}/busStops/${stopId}`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
+
+    getSchedulesForLine(lineId) {
+        return axios({
+            method: 'get',
+            url: `${BASEPATH}/busLines/${lineId}/schedules`,
+            withCredentials: false,
+            headers: {
+                'Access-Control-Allow-Origin': '*'
+            }
+        });
+    }
 }

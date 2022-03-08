@@ -5,6 +5,7 @@ import { useState } from "react";
 import './BuslineEditor.css';
 import { DataGrid } from "@mui/x-data-grid";
 import { ApiService } from "../../api/ApiService";
+import AddStopDialog from "./addStopDialog/AddStopDialog";
 
 export default function BuslineEditor({open, name, handleClose, setNameAndId, displayedName, setDisplayedName, busstops, id, isAdmin, removeLine}) {
 
@@ -12,6 +13,8 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
 
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+
+    const [deleteStopOpen, setDeleteStopOpen] = useState(false);
 
     const apiService = new ApiService();
 
@@ -31,9 +34,9 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
             setIsError(true);
             setErrorMsg("Felder dürfen nicht leer sein")
             return;
-        } else if (name && allBusstops.filter(stop => stop.nrReihenfolge).length === 0) {
+        } else if (!name && allBusstops.filter(stop => stop.nrReihenfolge).length < 2) {
             setIsError(true);
-            setErrorMsg("Mindestens eine Haltestelle muss ausgewählt sein");
+            setErrorMsg("Mindestens zwei Haltestellen müssen ausgewählt sein");
             return;
         }
         
@@ -66,10 +69,10 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
     }
 
     function deleteBusline() {
-        apiService.getStopsForLine(id).then(res => {
+        apiService.getSchedulesForLine(id).then(res => {
             if (res.data.length > 0) {
                 setIsError(true);
-                setErrorMsg("Buslinie enthält Haltestellen und kann nicht gelöscht werden!");
+                setErrorMsg("Buslinie ist in einem Fahrplan enthalten und kann nicht gelöscht werden!");
                 return;
             }
             apiService.deleteBusline(id).then(res => {
@@ -146,7 +149,10 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
                         </div>
                     }
                     {name &&
-                        <Button variant="contained" className="scheduleButton" style={{display: 'block', marginRight: 'auto', marginLeft: 'auto', marginTop: '10px'}} onClick={() => deleteBusline()}>Löschen</Button>
+                        <>
+                            <Button variant="contained" className="scheduleButton" style={{display: 'block', marginRight: 'auto', marginLeft: 'auto', marginTop: '10px'}} onClick={() => deleteBusline()}>Löschen</Button>
+                            <Button variant="contained" className="scheduleButton" style={{display: 'block', marginRight: 'auto', marginLeft: 'auto', marginTop: '10px'}} onClick={() => setDeleteStopOpen(true)}>Haltestelle entfernen</Button>
+                        </>
                     }
                 </DialogContent> 
                 <DialogActions>
@@ -158,5 +164,6 @@ export default function BuslineEditor({open, name, handleClose, setNameAndId, di
         <Snackbar open={isError} onClose={() => setIsError(false)} autoHideDuration={3000}>
             <Alert severity="error">{errorMsg}</Alert>    
         </Snackbar>
+        <AddStopDialog open={deleteStopOpen} line={{name: name, id: id}} handleClose={() => setDeleteStopOpen(false)} isAdmin={isAdmin} isDelete={true}></AddStopDialog>
     </>;
 }

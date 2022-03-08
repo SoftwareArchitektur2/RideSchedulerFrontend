@@ -20,7 +20,7 @@ export default function BusstopDetail({open, handleClose,  busstop,  isAdmin}) {
             setAllBuslines(res.data);
             setDisplayedBuslines(res.data);
         }
-        if (!isAdmin) {
+        if (!isAdmin && open) {
             fetchBusstops();
         }
       }, [busstop]);
@@ -32,7 +32,7 @@ export default function BusstopDetail({open, handleClose,  busstop,  isAdmin}) {
             setAllSchedules(res.data.map(schedule=>getdepartureTimeFromSchedule(schedule)));
             
         }
-        if (!isAdmin) {
+        if (!isAdmin && open) {
             fetchTimes();
         }
       }, [selectedBusline]);

@@ -115,7 +115,7 @@ export default function BusstopOverview({isAdmin}) {
                     <TableBody>
                         {
                             displayedBusstops.map((stop) => (
-                                <TableRow key={stop.name} className='tablerow' onClick={(event) => onSelectBusstop(stop)}>
+                                <TableRow key={stop.id} className='tablerow' onClick={(event) => onSelectBusstop(stop)}>
                                     <TableCell>{stop.name}</TableCell>
                                     <TableCell>{stop.hasWifi ? 'Ja' : 'Nein'}</TableCell>
                                 </TableRow>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import './BuslineDetail.css';
 
 export default function BuslineDetail({open, busline, handleClose, busstops}) {
+    let key = 0;
     
     return <>
         {busline &&

@@ -7,7 +7,7 @@ import { ApiService } from "../../api/ApiService";
 import './AddSchedule.css';
 
 export default function AddSchedule({open, handleClose, saveSchedule}) {
-    const [schedule, setSchedule] = useState({busLine: null, departureTime: null, destinationStop: {name: null, id: null}});    
+    const [schedule, setSchedule] = useState({busLine: null, departureTime: null, destinationStop: null});    
     const [startingTime, setStartingTime] = useState(null);
     const [lastStopDisabled, setLastStopDisabled] = useState(true);
     const [busstops, setBusstops] = useState([]);
@@ -54,7 +54,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     }
 
     function onHandleClose() {
-        setSchedule({busLine: null, departureTime: null, destinationStop: {name: null, id: null}});
+        setSchedule({busLine: null, departureTime: null, destinationStop: null});
         setStartingTime(null);
         setLastStopDisabled(true);
         handleClose();
@@ -66,6 +66,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
     }
 
     return <>
+            {open &&
             <Dialog open={open} onClose={() => onHandleClose()}>
                 <DialogTitle className="scheduleEditorTitle">Buslinien-Editor</DialogTitle>
                 <DialogContent className="editorContent">
@@ -98,14 +99,14 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                         <InputLabel id="stopLabel">Endhaltestelle</InputLabel>
                         <Select
                             fullWidth
-                            value={schedule.lastStop}
+                            value={schedule.destinationStop}
                             label="Endhaltestelle"
                             labelId="stopLabel"
                             onChange={(event) => setSchedule({...schedule, destinationStop: event.target.value})}
                             disabled={lastStopDisabled}
                         >
                             { busstops.map(stop =>
-                                <MenuItem value={stop}>{stop.name}</MenuItem>
+                                <MenuItem key={stop.id} value={stop}>{stop.name}</MenuItem>
                             )}
                         </Select>
                     </FormControl>
@@ -114,7 +115,7 @@ export default function AddSchedule({open, handleClose, saveSchedule}) {
                     <Button onClick={() => onHandleClose()}>Abbrechen</Button>
                     <Button onClick={() => onSaveSchedule()}>Speichern</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog>}
             <Snackbar open={isError} autoHideDuration={3000} onClose={() => setIsError(false)}>
                 <Alert severity="error">{errorMsg}</Alert>
             </Snackbar>
