@@ -12,7 +12,20 @@
     align-items: center;
 }
 
+.headerFieldSelected {
+    cursor: pointer;
+    min-height: 5vh;
+    display: flex;
+    align-items: center;
+    background-color: rgb(168, 168, 168);
+}
+
 .headerField:hover {
+    background-color: grey;
+    transition: 0.2s;
+}
+
+.headerFieldSelected:hover {
     background-color: grey;
     transition: 0.2s;
 }
