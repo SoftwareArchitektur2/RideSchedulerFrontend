@@ -1,8 +1,13 @@
-version: '2'
+version: '3.7'
 services:
-  frontend:
-    build:
+  ride-scheduler:
+    container_name: ride-scheduler
+    build: 
       context: .
-    container_name: ridescheduler
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_BACKEND_URL: "http://localhost:8080"
+    volumes:
+      - '/app/node_modules'
     ports:
-      - "3000:3000"
+      - 3030:80
