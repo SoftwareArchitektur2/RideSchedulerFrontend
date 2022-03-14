@@ -17,13 +17,7 @@ export default function JourneyPlanner({isAdmin}) {
     const [scheduleTime, setScheduleTime] = useState("");
 
     const [busstops, setBusstops] = useState([]);
-    const [mockJourneys, setMockJourneys] = useState([
-        {id: 0, line: "1", lastStop: "Tibusstraße", departure: "07:10"},
-        {id: 1, line: "11", lastStop: "Altstadt/Bült", departure: "08:10"},
-        {id: 2, line: "15", lastStop: "Eisenbahnstraße", departure: "09:10"},
-        {id: 3, line: "16", lastStop: "Hauptbahnhof", departure: "10:10"},
-        {id: 4, line: "22", lastStop: "Domplatz", departure: "11:10"}
-    ]);
+    const [journeys, setJourneys] = useState([]);
   
     const apiService = new ApiService();
     useEffect(() => {
@@ -38,7 +32,8 @@ export default function JourneyPlanner({isAdmin}) {
         if (selectedStop === null || startingTime === null || scheduleTime == "") {
             setIsError(true);
         } else {
-            apiService.getJourneyPlan(selectedStop.id, startingTime.toISOString(), moment.duration(scheduleTime, "HH:mm").as('minutes').toString()).then(res => { 
+            apiService.getJourneyPlan(selectedStop.id, startingTime.toISOString(true), moment.duration(scheduleTime, "HH:mm").as('minutes').toString()).then(res => { 
+                setJourneys(res.data);
                 setIsSearched(true);
             });
         }
@@ -103,7 +98,7 @@ export default function JourneyPlanner({isAdmin}) {
             <Alert severity="error">Felder wurden nicht gefüllt!</Alert>
         </Snackbar>
         {isSearched &&
-            <Box>
+            <Box sx={{marginBottom: '5vh'}}>
                     <TableContainer component={Paper} sx={{'width': '50%', 'marginLeft': 'auto', 'marginRight': 'auto', marginTop: '40px'}}>
                         <Table aria-label="Verfügbare Abfahrten">
                             <TableHead>
@@ -115,11 +110,11 @@ export default function JourneyPlanner({isAdmin}) {
                             </TableHead>
                             <TableBody>
                                 {
-                                    mockJourneys.map((journey) => (
+                                    journeys.map((journey) => (
                                         <TableRow key={journey.id} className='tablerowSchedules'>
-                                            <TableCell>{journey.line}</TableCell>
-                                            <TableCell>{journey.lastStop}</TableCell>
-                                            <TableCell>{journey.departure}</TableCell>
+                                            <TableCell>{journey.busLine.name}</TableCell>
+                                            <TableCell>{journey.destinationStop.name}</TableCell>
+                                            <TableCell>{moment(journey.departureTime, "YYYY-MM-DD[T]HH:mm:ss[.000+00:00]").format("HH:mm")}</TableCell>
                                         </TableRow>
                                     ))
                                 }

@@ -37,7 +37,7 @@ export default function AddStopDialog({open, line, handleClose, isAdmin, isDelet
 
     function addStop(stop) {
         if (isDelete) {
-            apiService.removeBusstopForBusline(line.id, stop.id).then(res => handleClose()).catch(error => {
+            apiService.removeBusstopForBusline(stop.busStopInBusLineId).then(res => handleClose()).catch(error => {
                 setErrorMsg(error.response.data);
                 setIsError(true);
             });
