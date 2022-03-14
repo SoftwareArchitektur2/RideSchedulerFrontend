@@ -10,4 +10,4 @@ services:
     volumes:
       - '/app/node_modules'
     ports:
-      - 3030:80
+      - 80:80
