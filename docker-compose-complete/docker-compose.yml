@@ -3,7 +3,7 @@ services:
   ride-scheduler:
     container_name: ride-scheduler
     build: 
-      context: ./RideSchedulerFrontend
+      context: ./ride-scheduler
       dockerfile: Dockerfile
       args:
         REACT_APP_BACKEND_URL: "http://localhost:8080"
