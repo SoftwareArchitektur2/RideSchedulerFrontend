@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASEPATH = process.env.REACT_APP_BACKEND_URL;
+const BASEPATH = "http://localhost:80/api";
 
 export class ApiService {
 	getAllBuslines() {
