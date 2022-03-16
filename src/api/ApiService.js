@@ -237,4 +237,15 @@ export class ApiService {
 			},
 		});
 	}
+
+	getBusstopsForSchedule(scheduleId, stopId) {
+		return axios({
+			method: "get",
+			url: `${BASEPATH}/schedules/${scheduleId}/busStops/${stopId}`,
+			withCredentials: false,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+			},
+		});
+	}
 }
