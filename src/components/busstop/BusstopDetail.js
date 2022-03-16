@@ -54,8 +54,11 @@ export default function BusstopDetail({ open, handleClose, busstop, isAdmin }) {
 			);
 
 			setAllSchedules(
-				res.data.map((schedule) =>
-					getdepartureTimeFromSchedule(schedule)
+				res.data.map((arrival) =>
+					moment(
+						arrival.arrivalTime,
+						"YYYY-MM-DD[T]HH:mm:ss[.000+00:00]"
+					).format("HH:mm")
 				)
 			);
 		};
@@ -63,25 +66,7 @@ export default function BusstopDetail({ open, handleClose, busstop, isAdmin }) {
 			fetchTimes();
 		}
 	}, [selectedBusline]);
-	function getdepartureTimeFromSchedule(schedule) {
-		if (schedule.departureTime.length > 10) {
-			return {
-				...schedule,
-				departureTime: moment(
-					schedule.departureTime,
-					"YYYY-MM-DD[T]HH:mm:ss[.000+00:00]"
-				).format("HH:mm"),
-			};
-		} else {
-			return {
-				...schedule,
-				departureTime: moment(
-					schedule.departureTime,
-					"HH:mm:ss"
-				).format("HH:mm"),
-			};
-		}
-	}
+
 	function onBusSearch(value) {
 		setDisplayedBuslines(
 			allBuslines.filter((bus) =>
@@ -205,13 +190,13 @@ export default function BusstopDetail({ open, handleClose, busstop, isAdmin }) {
 											</TableRow>
 										</TableHead>
 										<TableBody>
-											{allSchedules.map((line) => (
+											{allSchedules.map((time) => (
 												<TableRow
-													key={line.departureTime}
+													key={time}
 													className="tablerowSchedules"
 												>
 													<TableCell>
-														{line.departureTime}
+														{time}
 													</TableCell>
 												</TableRow>
 											))}
