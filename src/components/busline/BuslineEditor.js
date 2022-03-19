@@ -89,19 +89,14 @@ export default function BuslineEditor({
 					.sort((a, b) => {
 						return a.nrReihenfolge - b.nrReihenfolge;
 					});
-				sortedStops
-					.forEach((stop) => {
-						apiService
-							.saveBusstopForBusline(savedLine.data.id, stop)
-							.catch((error) => {
-								setIsError(true);
-								setErrorMsg(error.response.data);
-							});
-					})
-					.catch((error) => {
-						setIsError(true);
-						setErrorMsg(error.response.data);
-					});
+				sortedStops.forEach((stop) => {
+					apiService
+						.saveBusstopForBusline(savedLine.data.id, stop)
+						.catch((error) => {
+							setIsError(true);
+							setErrorMsg(error.response.data);
+						});
+				});
 				setNameAndId(displayedName, savedId ? savedId : id);
 				handleClose();
 			});
