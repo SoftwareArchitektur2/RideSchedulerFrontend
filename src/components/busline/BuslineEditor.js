@@ -82,40 +82,44 @@ export default function BuslineEditor({
 					setErrorMsg(error.response.data);
 				});
 		} else {
-			apiService.saveBusline(displayedName).then((savedLine) => {
-				savedId = savedLine.data.id;
-				let sortedStops = allBusstops
-					.filter((stop) => stop.nrReihenfolge)
-					.sort((a, b) => {
-						return a.nrReihenfolge - b.nrReihenfolge;
-					});
-				sortedStops.forEach((stop) => {
-					apiService
-						.saveBusstopForBusline(savedLine.data.id, stop)
-						.catch((error) => {
-							setIsError(true);
-							setErrorMsg(error.response.data);
+			apiService
+				.saveBusline(displayedName)
+				.then((savedLine) => {
+					savedId = savedLine.data.id;
+					let sortedStops = allBusstops
+						.filter((stop) => stop.nrReihenfolge)
+						.sort((a, b) => {
+							return a.nrReihenfolge - b.nrReihenfolge;
 						});
+					sortedStops.forEach((stop) => {
+						apiService
+							.saveBusstopForBusline(savedLine.data.id, stop)
+							.catch((error) => {
+								setIsError(true);
+								setErrorMsg(error.response.data);
+							});
+					});
+					setNameAndId(displayedName, savedId ? savedId : id);
+					handleClose();
+				})
+				.catch((error) => {
+					setErrorMsg(error.response.data);
+					setIsError(true);
 				});
-				setNameAndId(displayedName, savedId ? savedId : id);
-				handleClose();
-			});
 		}
 	}
 
 	function deleteBusline() {
-		apiService.getSchedulesForLine(id).then((res) => {
-			apiService
-				.deleteBusline(id)
-				.then((res) => {
-					removeLine(id);
-					handleClose();
-				})
-				.catch((error) => {
-					setIsError(true);
-					setErrorMsg(error.response.data);
-				});
-		});
+		apiService
+			.deleteBusline(id)
+			.then((res) => {
+				removeLine(id);
+				handleClose();
+			})
+			.catch((error) => {
+				setIsError(true);
+				setErrorMsg(error.response.data);
+			});
 	}
 
 	// const busstopColumns = [
