@@ -2,10 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import raw from "./startup.txt";
 
 ReactDOM.render(
 	<React.StrictMode>
-		{(console.log = console.warn = console.error = () => {})}
+		<>
+			{fetch(raw)
+				.then((r) => r.text())
+				.then(console.log) && <></>}
+			{(console.log = console.warn = console.error = () => {})}
+		</>
 		<App />
 	</React.StrictMode>,
 	document.getElementById("root")

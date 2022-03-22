@@ -142,7 +142,7 @@ export class ApiService {
 		});
 	}
 
-	saveBusstopForBusline(lineId, stop) {
+	saveBusstopForBusline(lineId, stop, ttns) {
 		return axios({
 			method: "post",
 			url: `${BASEPATH}/busLines/${lineId}/busStops`,
@@ -152,7 +152,7 @@ export class ApiService {
 			},
 			data: {
 				id: stop.id,
-				timeToNextStop: stop.timeToNextStop,
+				timeToNextStop: ttns,
 			},
 		});
 	}
