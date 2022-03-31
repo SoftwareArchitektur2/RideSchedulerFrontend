@@ -123,6 +123,7 @@ export default function BusstopEditor({
 									marginTop: "10px",
 								}}
 								onClick={() => deleteBusStop()}
+								disabled={!busstop.id}
 							>
 								Löschen
 							</Button>
